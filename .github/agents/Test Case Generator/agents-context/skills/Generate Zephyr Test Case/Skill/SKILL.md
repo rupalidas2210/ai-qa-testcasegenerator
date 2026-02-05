@@ -122,18 +122,18 @@ Each test case MUST have appropriate labels in the "Labels" column:
 ### 3. File Naming Convention
 - Extract the project name from the Test Plan file name
 - Format the output file name as: ProjectName_Zephyrimportready.csv
-- **Save location**: `.github\agents\Test Case Generator\agents-context\Test Case\ZephyrReadyTestCases\`
-- **Full path example**: `.github\agents\Test Case Generator\agents-context\Test Case\ZephyrReadyTestCases\Spectrum_Brand_Manager_Zephyrimportready.csv`
+- **Save location**: `.github\agents\Test Case Generator\agents-context\ZephyrReadyTestCases\`
+- **Full path example**: `.github\agents\Test Case Generator\agents-context\ZephyrReadyTestCases\Spectrum_Brand_Manager_Zephyrimportready.csv`
 - Example: If Test Plan is "Spectrum_Brand_Manager_TestPlan.md", CSV file should be "Spectrum_Brand_Manager_Zephyrimportready.csv"
 
 ---
 
 ### 4. Response Format
-- Respond with the project name followed by "Zephyrimportready.csv created in .github\agents\Test Case Generator\agents-context\skills\Test Case\ZephyrReadyTestCases"
+- Respond with the project name followed by "Zephyrimportready.csv created in .github\agents\Test Case Generator\agents-context\ZephyrReadyTestCases"
 - Include summary of test case types generated
 - Example response:
   ```
-  # Spectrum Brand Manager - Zephyrimportready.csv created in .github\agents\Test Case Generator\agents-context\skills\Test Case\ZephyrReadyTestCases
+  # Spectrum Brand Manager - Zephyrimportready.csv created in .github\agents\Test Case Generator\agents-context\ZephyrReadyTestCases
   
   ✅ Test Cases Generated: 65 test cases covering:
      - Functional: 25 test cases

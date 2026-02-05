@@ -115,7 +115,7 @@ Group scenarios by:
 
 ### 3. Test Plan File Creation Rules (File Naming)
 - The system must create a Test Plan markdown file.
-- **The Test Plan must be saved in the folder**: `.github\agents\Test Case Generator\agents-context\Test Case\TestPlan`
+- **The Test Plan must be saved in the folder**: `.github\agents\Test Case Generator\agents-context\TestPlan`
 - If the folder doesn't exist, create it automatically.
 
 #### Test Plan File Naming:
@@ -123,17 +123,17 @@ Group scenarios by:
 - Remove `#` symbols and extra spaces to extract the **Project Name**.
 - Replace spaces with underscores.
 - Format the file name as: `ProjectName_TestPlan.md`
-- **Full path example**: `.github\agents\Test Case Generator\agents-context\Test Case\TestPlan\Spectrum_Brand_Manager_TestPlan.md`
+- **Full path example**: `.github\agents\Test Case Generator\agents-context\agents-context\TestPlan\Spectrum_Brand_Manager_TestPlan.md`
 - Example:
   - First line in requirement.md: `# Spectrum Brand Manager`
   - Extracted Project Name: `Spectrum Brand Manager`
   - File name: `Spectrum_Brand_Manager_TestPlan.md`
-  - **Full file path**: `.github\agents\Test Case Generator\agents-context\Test Case\TestPlan\Spectrum_Brand_Manager_TestPlan.md`
+  - **Full file path**: `.github\agents\Test Case Generator\agents-context\TestPlan\Spectrum_Brand_Manager_TestPlan.md`
 
 #### Confirmation Response:
 - After creation, respond with:
   ```
-  ✅ Test Plan Created: ProjectName_TestPlan.md in .github\agents\Test Case Generator\agents-context\skills\Test Case\TestPlan
+  ✅ Test Plan Created: ProjectName_TestPlan.md in .github\agents\Test Case Generator\agents-context\TestPlan
   
   Next Step: Use "Generate Zephyr Test Case" skill to generate Zephyr-ready test cases from this Test Plan.
   ```

@@ -36,7 +36,7 @@ When the user selects you or sends a message, automatically execute this complet
     - Coverage model (Functional, Data, State, Role, Integration)
     - Test data strategy
     - Entry/exit criteria
-- **Output**: `.github\agents\Test Case Generator\agents-context\Test Case\TestPlan\<ProjectName>_TestPlan.md`
+- **Output**: `.github\agents\Test Case Generator\agents-context\TestPlan\<ProjectName>_TestPlan.md`
 - **Confirmation**: "✅ Test Plan Created: `<ProjectName>_TestPlan.md`"
 
 **⚠️ CHECKPOINT: Test Plan must be successfully created before proceeding to Step 2**
@@ -44,7 +44,7 @@ When the user selects you or sends a message, automatically execute this complet
 ### Step 2: Generate Zephyr Test Cases (DEPENDS ON STEP 1)
 - **Input**: Test Plan file created in Step 1
 - **Use**: **Generate Zephyr Test Case** skill
-- **Prerequisite Check**: Verify Test Plan exists in `.github\agents\Test Case Generator\agents-context\Test Case\TestPlan\`
+- **Prerequisite Check**: Verify Test Plan exists in `.github\agents\Test Case Generator\agents-context\TestPlan\`
 - **Process**:
   - Read the Test Plan from Step 1
   - Extract all test scenarios and requirements
@@ -59,14 +59,14 @@ When the user selects you or sends a message, automatically execute this complet
   - Format CSV with all 16 Zephyr columns
   - Multi-step test cases: Step 1 with metadata, Steps 2+ only in Test Step column
   - Labels in single cell, comma-separated (e.g., "Functional,Regression,E2E")
-- **Output**: `.github\agents\Test Case Generator\agents-context\Test Case\ZephyrReadyTestCases\<ProjectName>_Zephyrimportready.csv`
+- **Output**: `.github\agents\Test Case Generator\agents-context\ZephyrReadyTestCases\<ProjectName>_Zephyrimportready.csv`
 - **Confirmation**: "✅ Test Cases Generated: XX test cases covering all 7 types"
 
 ### Step 3: Provide Summary
 - Confirm both files were created successfully with full paths
 - Show file locations:
-  - Test Plan: `.github\agents\Test Case Generator\agents-context\Test Case\TestPlan\<ProjectName>_TestPlan.md`
-  - Test Cases: `.github\agents\Test Case Generator\agents-context\Test Case\ZephyrReadyTestCases\<ProjectName>_Zephyrimportready.csv`
+  - Test Plan: `.github\agents\Test Case Generator\agents-context\TestPlan\<ProjectName>_TestPlan.md`
+  - Test Cases: `.github\agents\Test Case Generator\agents-context\ZephyrReadyTestCases\<ProjectName>_Zephyrimportready.csv`
 - Display key metrics:
   - Total test cases generated
   - Breakdown by test type (Functional, Regression, Smoke, E2E, Integration, Negative, Edge)
@@ -90,10 +90,11 @@ When the user selects you or sends a message, automatically execute this complet
 3. Send any message or click a conversation starter
 4. The agent will automatically run both skills in sequence and generate both outputs
 
-## Skills Used
 
-- `#file:Test%20Case%20Generator/agents-context/skills/Generate%20Test%20Plan/Skill/SKILL.md`
-- `#file:Test%20Case%20Generator/agents-context/skills/Generate%20Zephyr%20Test%20Case/Skill/SKILL.md`
+## Referenced Skills
+.github/agents/Test Case Generator/agents-context/skills/Generate Test Plan/Skill/SKILL.md  
+.github/agents/Test Case Generator/agents-context/skills/Generate Zephyr Test Case/Skill/SKILL.md
+
 
 ## Conversation Starters
 
