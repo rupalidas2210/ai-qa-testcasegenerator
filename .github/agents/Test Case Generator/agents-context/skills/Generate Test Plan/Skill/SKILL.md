@@ -94,7 +94,7 @@ Group scenarios by:
 - Conditions required to declare testing complete:
   - 100% RTM coverage
   - All scenarios executed
-  - Defect thresholds met
+  
 
 #### 2.11 Defect Management
 - Severity and priority definitions.

@@ -81,8 +81,9 @@ Generate test cases for **ALL** of the following types:
 - Generate test cases using ZephyrTestCaseTemplate.csv
 - Each test case must start on a single row with all test metadata populated:
 
-  Name, Objective, Pre-condition, Test Step (Step 1), Test Data, Test Result, Labels, Components, Parent Link, QA Engineer, Fix versions, Affect versions, Automated, API, Jira, Sub Domain.
+  Name, Objective, Pre-condition, Test Step (Step 1), Test Data, Test Result, Labels,Components,QA Engineer, Fix versions, Affect versions, Automated, API, Jira, Sub Domain,Requirement ID.
 
+- **IMPORTANT:** The "Sub Domain" column must always be left blank (empty) for all test cases.
 - If a test case has more than one step:
   - Step 1 must appear in the main test case row under the "Test Step" column
   - Step 2, Step 3, and subsequent steps must each appear on their own new rows beneath Step 1 under the "Test Step" column
@@ -117,7 +118,55 @@ Each test case MUST have appropriate labels in the "Labels" column:
 - Correct format in CSV: `"Functional,Regression,E2E"` in the Labels column
 - Incorrect: Having Functional in one column, Regression in another column
 
----
+#### 2.5 Requirement ID Column - Requirements & Test Scenario Traceability
+The "Requirement ID" column MUST contain ONE Requirement ID and ONE Test Scenario ID per test case:
+
+**How to Extract from RTM:**
+- **Always reference the RTM table (Section 3) in the Test Plan**
+- For each test case, look up the corresponding row in the RTM
+- Extract the Requirement ID (Req ID column) and ONE Test Scenario ID (from Test Scenario IDs column)
+- Create separate test cases for each Test Scenario ID listed in the RTM
+
+**RTM Example:**
+```
+| Req ID  | Requirement Description        | Acceptance Criteria | Test Scenario IDs | Test Case IDs |
+|---------|--------------------------------|---------------------|-------------------|---------------|
+| REQ-001 | Login Screen UI Elements       | Display User ID...  | TS-001, TS-002    | TBD           |
+```
+
+**This RTM row generates TWO test cases:**
+- **Test Case 1** - Requirement ID column: `"REQ-001,TS-001"` (quoted in CSV)
+- **Test Case 2** - Requirement ID column: `"REQ-001,TS-002"` (quoted in CSV)
+
+**CRITICAL - One-to-One Mapping Rule:**
+- Each test case = ONE Requirement ID + ONE Test Scenario ID
+- Format in CSV file: `"REQ-XXX,TS-YYY"` (comma-separated values MUST be wrapped in quotes)
+- If RTM shows multiple Test Scenario IDs for one Requirement, create separate test cases for EACH scenario
+- Do NOT combine multiple Test Scenario IDs in one test case
+
+**Formatting Rules:**
+- Both Requirement ID and Test Scenario ID MUST be in the SAME "Requirement ID" column cell
+- Do NOT create a second column for TS- values
+- **ALWAYS wrap the value in double quotes when writing to CSV:** `"REQ-001,TS-001"`
+- Without quotes, the comma will be treated as a column separator
+- **Same rule as Labels column:** Just like `"Functional,Regression,E2E"` must be quoted, so must `"REQ-001,TS-001"`
+
+**Requirements Traceability Best Practices:**
+- Every test case must have exactly ONE REQ ID and ONE TS ID from the RTM in the same Requirement ID column cell
+- Do NOT create a second column for TS ID
+- Format: `"REQ-XXX,TS-YYY"` (quoted, comma-separated, no spaces)
+- If RTM shows `TS-001, TS-002`, create two separate test cases with separate rows
+- Maintain one-to-one traceability: 1 Requirement ID ↔ 1 Test Scenario ID ↔ 1 Test Case
+- Ensure 100% RTM coverage by creating test cases for all test scenarios listed
+- **Verify in the generated CSV that Requirement ID values appear in a SINGLE column, not split across two columns**
+- Cross-verify each test case maps back to correct row in RTM table
+
+#### 2.6 Sub Domain Column - Leave Blank
+**MANDATORY Rule:**
+- The "Sub Domain" column MUST always be left blank (empty) for all test cases
+- Do NOT populate this column with any values
+- This applies to both the main test case row and all subsequent step rows
+- Format in CSV: Leave the Sub Domain column empty with no text
 
 ### 3. File Naming Convention
 - Extract the project name from the Test Plan file name

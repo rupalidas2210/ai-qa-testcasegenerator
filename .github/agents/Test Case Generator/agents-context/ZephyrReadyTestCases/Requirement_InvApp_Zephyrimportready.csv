@@ -1,0 +1,457 @@
+Name,Objective,Pre-condition,Test Step,Test Data,Test Result,Labels,Components,QA Engineer,Fix versions,Affect versions,Automated,API,Jira,Sub Domain,Requirement ID
+Verify IP displays 0 when no pick shift,Validate that IP field shows 0 when item is not tied to any pick shift,Item exists in inventory with no active pick shift,"Step 1: Navigate to INV screen
+Step 2: Locate item ITEM-001
+Step 3: Observe IP field value","Item ID: ITEM-001
+QOH: 100
+IP: 0",IP field displays 0 on INV screen,Functional,INV Screen,,,,,,,,"REQ-001,TS-001"
+,,,Step 2: Locate item ITEM-001,,,,,,,,,,,,
+,,,Step 3: Observe IP field value,,,,,,,,,,,,
+Verify IP field is always visible on INV screen,Validate that IP field is present on INV screen at all times,User has access to INV screen,"Step 1: Navigate to INV screen
+Step 2: Verify IP field is visible for item without pick shift
+Step 3: Verify IP field is visible for item with pick shift","Various items:
+- ITEM-001 (IP=0)
+- ITEM-003 (IP=20)",IP field is visible in both scenarios,Functional,INV Screen,,,,,,,,"REQ-001,TS-002"
+,,,Step 2: Verify IP field is visible for item without pick shift,,,,,,,,,,,,
+,,,Step 3: Verify IP field is visible for item with pick shift,,,,,,,,,,,,
+Verify IP updates when order is released,Validate that IP value updates on INV screen when order release occurs,Item exists with QOH and order release is triggered,"Step 1: Note initial IP value (should be 0)
+Step 2: Trigger order release for 10 units
+Step 3: Refresh INV screen
+Step 4: Verify IP displays updated value","Item ID: ITEM-003
+QOH_original: 100
+Order quantity: 10",IP updates to 10 on INV screen,Functional,INV Screen,,,,,,,,"REQ-002,TS-003"
+,,,Step 2: Trigger order release for 10 units,,,,,,,,,,,,
+,,,Step 3: Refresh INV screen,,,,,,,,,,,,
+,,,Step 4: Verify IP displays updated value,,,,,,,,,,,,
+Verify IP reflects correct pick quantity,Validate that IP displays the exact quantity allocated for pick shift,Order release with specific quantity triggered,"Step 1: Trigger order release for 10 items
+Step 2: Navigate to INV screen
+Step 3: Verify IP = 10","Item ID: ITEM-004
+Order quantity: 10",INV screen displays IP = 10,Functional,INV Screen,,,,,,,,"REQ-002,TS-004"
+,,,Step 2: Navigate to INV screen,,,,,,,,,,,,
+,,,Step 3: Verify IP = 10,,,,,,,,,,,,
+Verify QOH recalculation formula,Validate QOH_new = QOH_original - IP calculation is accurate,Item with QOH_original = 100 and order release triggered for 10 units,"Step 1: Note QOH_original = 100
+Step 2: Trigger order release (IP = 10)
+Step 3: Verify QOH_new = 90","QOH_original: 100
+IP: 10
+Expected QOH_new: 90","QOH recalculates correctly to 90 (100-10)",Functional,INV Screen,,,,,,,,"REQ-003,TS-005"
+,,,Step 2: Trigger order release (IP = 10),,,,,,,,,,,,
+,,,Step 3: Verify QOH_new = 90,,,,,,,,,,,,
+Verify QOH updates in real-time,Validate that QOH recalculation happens immediately when IP changes,Item on INV screen with order release pending,"Step 1: Observe current QOH
+Step 2: Trigger order release (IP changes from 0 to 20)
+Step 3: Verify QOH recalculates immediately without manual refresh","QOH_original: 100
+IP changes: 0 → 20
+Expected QOH_new: 80",QOH updates to 80 in real-time,Functional,INV Screen,,,,,,,,"REQ-003,TS-006"
+,,,Step 2: Trigger order release (IP changes from 0 to 20),,,,,,,,,,,,
+,,,Step 3: Verify QOH recalculates immediately without manual refresh,,,,,,,,,,,,
+Verify QOH when IP equals QOH_original,Validate system behavior when full quantity is allocated to pick shift,Item with QOH_original = 50 and order release for all 50 units,"Step 1: Note QOH_original = 50
+Step 2: Trigger order release for 50 units (IP = 50)
+Step 3: Verify QOH_new = 0","QOH_original: 50
+IP: 50
+Expected QOH_new: 0","QOH_new displays 0 (50-50)",Functional,Edge,,,,,,,,"REQ-003,TS-007"
+,,,Step 2: Trigger order release for 50 units (IP = 50),,,,,,,,,,,,
+,,,Step 3: Verify QOH_new = 0,,,,,,,,,,,,
+Verify negative adjustment allowed on item with pick shift,Validate that Remove Adjustment is permitted on items tied to pick shift,Item tied to active pick shift (IP > 0),"Step 1: Navigate to INV screen
+Step 2: Select item ITEM-003 with IP = 20
+Step 3: Navigate to home screen
+Step 4: Select Remove option
+Step 5: Verify no blocker message appears
+Step 6: Verify Remove Adjustment screen opens","Item ID: ITEM-003
+QOH_original: 100
+IP: 20
+QOH_new: 80","Remove Adjustment is allowed, no blocker displayed",Functional,Home Screen,,,,,,,,"REQ-004,TS-008"
+,,,Step 2: Select item ITEM-003 with IP = 20,,,,,,,,,,,,
+,,,Step 3: Navigate to home screen,,,,,,,,,,,,
+,,,Step 4: Select Remove option,,,,,,,,,,,,
+,,,Step 5: Verify no blocker message appears,,,,,,,,,,,,
+,,,Step 6: Verify Remove Adjustment screen opens,,,,,,,,,,,,
+Verify blocker is removed for items with pick shift,Validate that previous blocker preventing negative adjustment is no longer present,Previously blocker existed for items with pick shifts,"Step 1: Select item with active pick shift
+Step 2: Attempt to access Remove Adjustment
+Step 3: Verify access is granted without any blocker","Item ID: ITEM-003
+IP: 20",User can proceed with Remove Adjustment,Functional,Remove Adjustment,,,,,,,,"REQ-004,TS-009"
+,,,Step 2: Attempt to access Remove Adjustment,,,,,,,,,,,,
+,,,Step 3: Verify access is granted without any blocker,,,,,,,,,,,,
+Verify Remove option visible on home screen,Validate that Remove option is displayed and clickable on home screen,User is on home screen,"Step 1: Navigate to home screen
+Step 2: Verify Remove option is visible
+Step 3: Verify Remove option is clickable",User navigates to home screen,"Remove option is visible and clickable on home screen",Smoke,Home Screen,,,,,,,,"REQ-005,TS-010"
+,,,Step 2: Verify Remove option is visible,,,,,,,,,,,,
+,,,Step 3: Verify Remove option is clickable,,,,,,,,,,,,
+Verify navigation to Remove Adjustment screen,Validate user can navigate from home screen to Remove Adjustment screen,User has selected an item and is on home screen,"Step 1: From home screen, click Remove option
+Step 2: Verify Remove Adjustment screen opens
+Step 3: Verify item details are displayed","Selected item: ITEM-001
+QOH: 100
+IP: 0",Remove Adjustment screen opens with item details,Smoke,Home Screen,,,,,,,,"REQ-005,TS-011"
+,,,Step 2: Verify Remove Adjustment screen opens,,,,,,,,,,,,
+,,,Step 3: Verify item details are displayed,,,,,,,,,,,,
+Verify Minus button decreases quantity,Validate that clicking Minus button decreases adjustment quantity by 1,Remove Adjustment screen with quantity = 5,"Step 1: Observe current quantity = 5
+Step 2: Click Minus button once
+Step 3: Verify quantity decreases to 4","Initial quantity: 5
+Expected after Minus: 4",Quantity decreases from 5 to 4,Functional,Remove Adjustment,,,,,,,,"REQ-006,TS-012"
+,,,Step 2: Click Minus button once,,,,,,,,,,,,
+,,,Step 3: Verify quantity decreases to 4,,,,,,,,,,,,
+Verify Plus button increases quantity,Validate that clicking Plus button increases adjustment quantity by 1,Remove Adjustment screen with quantity = 5 and updated QOH = 80,"Step 1: Observe current quantity = 5
+Step 2: Click Plus button once
+Step 3: Verify quantity increases to 6","Initial quantity: 5
+Expected after Plus: 6
+Updated QOH: 80",Quantity increases from 5 to 6,Functional,Remove Adjustment,,,,,,,,"REQ-006,TS-013"
+,,,Step 2: Click Plus button once,,,,,,,,,,,,
+,,,Step 3: Verify quantity increases to 6,,,,,,,,,,,,
+Verify Minus button at minimum boundary,Validate that Minus button does not allow negative quantity,Remove Adjustment screen with quantity = 0,"Step 1: Set quantity to 0
+Step 2: Click Minus button
+Step 3: Verify quantity remains 0","Initial quantity: 0
+Expected after Minus: 0",Quantity remains 0 (does not go negative),Negative,Remove Adjustment,,,,,,,,"REQ-006,TS-014"
+,,,Step 2: Click Minus button,,,,,,,,,,,,
+,,,Step 3: Verify quantity remains 0,,,,,,,,,,,,
+Verify keypad entry within limit,Validate that user can enter valid quantity via keypad within updated QOH limit,Remove Adjustment screen with updated QOH = 50,"Step 1: Click on quantity input field to open keypad
+Step 2: Enter 30 via keypad
+Step 3: Verify system accepts 30 as adjustment quantity","Updated QOH: 50
+Keypad entry: 30",System accepts 30 as valid adjustment quantity,Functional,Remove Adjustment,,,,,,,,"REQ-007,TS-015"
+,,,Step 2: Enter 30 via keypad,,,,,,,,,,,,
+,,,Step 3: Verify system accepts 30 as adjustment quantity,,,,,,,,,,,,
+Verify keypad entry of zero,Validate that user can enter 0 via keypad,Remove Adjustment screen with updated QOH = 50,"Step 1: Open keypad
+Step 2: Enter 0 via keypad
+Step 3: Verify system accepts 0","Updated QOH: 50
+Keypad entry: 0",System accepts 0 as valid adjustment quantity,Functional,Remove Adjustment,,,,,,,,"REQ-007,TS-016"
+,,,Step 2: Enter 0 via keypad,,,,,,,,,,,,
+,,,Step 3: Verify system accepts 0,,,,,,,,,,,,
+Verify max removable quantity equals updated QOH,Validate that maximum removable quantity is exactly updated QOH (QOH_original - IP),Item with QOH_original = 100 and IP = 20,"Step 1: Navigate to Remove Adjustment screen
+Step 2: Verify displayed QOH_new = 80
+Step 3: Enter 80 via keypad
+Step 4: Verify system allows removal of 80","QOH_original: 100
+IP: 20
+QOH_new: 80
+Adjustment: 80",System allows removal of exactly 80 units (max limit),Functional,Remove Adjustment,,,,,,,,"REQ-008,TS-017"
+,,,Step 2: Verify displayed QOH_new = 80,,,,,,,,,,,,
+,,,Step 3: Enter 80 via keypad,,,,,,,,,,,,
+,,,Step 4: Verify system allows removal of 80,,,,,,,,,,,,
+Verify Plus button cannot exceed updated QOH,Validate that Plus button stops incrementing at updated QOH limit,Remove Adjustment screen with updated QOH = 80 and quantity = 80,"Step 1: Set quantity to 80 using Plus button
+Step 2: Click Plus button again
+Step 3: Verify quantity remains at 80","Updated QOH: 80
+Current quantity: 80",Quantity remains 80 (Plus button disabled or no effect),Negative,Remove Adjustment,,,,,,,,"REQ-008,TS-018"
+,,,Step 2: Click Plus button again,,,,,,,,,,,,
+,,,Step 3: Verify quantity remains at 80,,,,,,,,,,,,
+Verify validation when exceeding limit via buttons,Validate system prevents user from exceeding updated QOH using buttons,Remove Adjustment screen with updated QOH = 80,"Step 1: Attempt to increment quantity beyond 80 using Plus button
+Step 2: Verify system prevents increment
+Step 3: Verify quantity does not exceed 80",Updated QOH: 80,"System enforces max limit, quantity stays at 80",Negative,Remove Adjustment,,,,,,,,"REQ-008,TS-019"
+,,,Step 2: Verify system prevents increment,,,,,,,,,,,,
+,,,Step 3: Verify quantity does not exceed 80,,,,,,,,,,,,
+Verify auto-adjust when keypad exceeds limit,Validate that system auto-adjusts keypad entry to max allowable value when user enters quantity exceeding updated QOH,Remove Adjustment screen with updated QOH = 50,"Step 1: Open keypad
+Step 2: Enter 70 via keypad
+Step 3: Verify system auto-adjusts to 50","Updated QOH: 50
+Keypad entry: 70
+Expected adjustment: 50",System automatically adjusts quantity to 50,Functional,Remove Adjustment,,,,,,,,"REQ-009,TS-020"
+,,,Step 2: Enter 70 via keypad,,,,,,,,,,,,
+,,,Step 3: Verify system auto-adjusts to 50,,,,,,,,,,,,
+Verify auto-adjust at exact limit,Validate that no auto-adjustment occurs when user enters exactly the updated QOH,Remove Adjustment screen with updated QOH = 50,"Step 1: Open keypad
+Step 2: Enter 50 via keypad
+Step 3: Verify system accepts 50 without adjustment","Updated QOH: 50
+Keypad entry: 50",System accepts 50 (no auto-adjustment needed),Functional,Remove Adjustment,,,,,,,,"REQ-009,TS-021"
+,,,Step 2: Enter 50 via keypad,,,,,,,,,,,,
+,,,Step 3: Verify system accepts 50 without adjustment,,,,,,,,,,,,
+Verify auto-adjust with large excess value,Validate that system handles very large keypad entries by auto-adjusting to max limit,Remove Adjustment screen with updated QOH = 50,"Step 1: Open keypad
+Step 2: Enter 9999 via keypad
+Step 3: Verify system auto-adjusts to 50","Updated QOH: 50
+Keypad entry: 9999
+Expected adjustment: 50",System automatically adjusts quantity to 50,Edge,Remove Adjustment,,,,,,,,"REQ-009,TS-022"
+,,,Step 2: Enter 9999 via keypad,,,,,,,,,,,,
+,,,Step 3: Verify system auto-adjusts to 50,,,,,,,,,,,,
+Verify Confirm button processes adjustment,Validate that clicking Confirm button processes the adjustment,Remove Adjustment screen with quantity set to 20,"Step 1: Set adjustment quantity to 20
+Step 2: Click Confirm button
+Step 3: Verify system processes the adjustment","Adjustment quantity: 20
+QOH before: 80",System processes adjustment successfully,Functional,Remove Adjustment,,,,,,,,"REQ-010,TS-023"
+,,,Step 2: Click Confirm button,,,,,,,,,,,,
+,,,Step 3: Verify system processes the adjustment,,,,,,,,,,,,
+Verify success snackbar displays after confirmation,Validate that success snackbar appears after adjustment is confirmed,Adjustment has been confirmed and processed,"Step 1: Confirm adjustment
+Step 2: Observe screen for success message
+Step 3: Verify success snackbar appears with appropriate message",Adjustment confirmed successfully,Success snackbar displays with confirmation message,Smoke,Remove Adjustment,,,,,,,,"REQ-010,TS-024"
+,,,Step 2: Observe screen for success message,,,,,,,,,,,,
+,,,Step 3: Verify success snackbar appears with appropriate message,,,,,,,,,,,,
+Verify QOH updates after adjustment confirmation,Validate that QOH value is updated and displayed after successful adjustment,QOH_new = 80 before adjustment; remove 10 units,"Step 1: Note QOH_new = 80
+Step 2: Set adjustment quantity to 10
+Step 3: Confirm adjustment
+Step 4: Verify QOH updates to 70 on INV screen","QOH_new before: 80
+Adjustment: 10
+Expected QOH after: 70",QOH updates to 70 and displays correctly,Functional,INV Screen,,,,,,,,"REQ-011,TS-025"
+,,,Step 2: Set adjustment quantity to 10,,,,,,,,,,,,
+,,,Step 3: Confirm adjustment,,,,,,,,,,,,
+,,,Step 4: Verify QOH updates to 70 on INV screen,,,,,,,,,,,,
+Verify QOH persists after screen refresh,Validate that updated QOH value persists after refreshing INV screen,Adjustment has been completed successfully,"Step 1: Complete adjustment (QOH updated to 70)
+Step 2: Refresh INV screen
+Step 3: Verify QOH still shows 70","QOH after adjustment: 70
+Action: Screen refresh",QOH persists at 70 after refresh,Regression,INV Screen,,,,,,,,"REQ-011,TS-026"
+,,,Step 2: Refresh INV screen,,,,,,,,,,,,
+,,,Step 3: Verify QOH still shows 70,,,,,,,,,,,,
+Verify QOH does not update on cancel,Validate that QOH remains unchanged when user cancels adjustment,User sets adjustment but cancels before confirming,"Step 1: Note original QOH = 80
+Step 2: Set adjustment quantity to 10
+Step 3: Click Cancel button
+Step 4: Navigate back to INV screen
+Step 5: Verify QOH remains 80","Original QOH: 80
+Adjustment set: 10
+Action: Cancel",QOH remains unchanged at 80,Negative,Remove Adjustment,,,,,,,,"REQ-011,TS-027"
+,,,Step 2: Set adjustment quantity to 10,,,,,,,,,,,,
+,,,Step 3: Click Cancel button,,,,,,,,,,,,
+,,,Step 4: Navigate back to INV screen,,,,,,,,,,,,
+,,,Step 5: Verify QOH remains 80,,,,,,,,,,,,
+Verify IP displays zero explicitly when no pick shift,Validate that IP field shows "0" (not blank) when item is not in pick shift,Item not assigned to any pick shift,"Step 1: Navigate to INV screen
+Step 2: Select item ITEM-001 with no pick shift
+Step 3: Verify IP displays ""0"" explicitly (not empty or blank)","Item ID: ITEM-001
+Pick shift: None
+IP: 0","IP field displays ""0"" explicitly",Functional,INV Screen,,,,,,,,"REQ-012,TS-028"
+,,,Step 2: Select item ITEM-001 with no pick shift,,,,,,,,,,,,
+,,,,"Step 3: Verify IP displays ""0"" explicitly (not empty or blank)",,,,,,,,,,,,
+Verify IP resets to 0 after pick shift completion,Validate that IP value returns to 0 after pick shift is completed,Pick shift has been completed for an item,"Step 1: Note item had IP = 20 during active pick shift
+Step 2: Complete the pick shift
+Step 3: Navigate to INV screen
+Step 4: Verify IP displays 0","Item ID: ITEM-003
+IP during pick shift: 20
+Pick shift: Completed",IP resets to 0 after pick shift completion,Functional,INV Screen,,,,,,,,"REQ-012,TS-029"
+,,,Step 2: Complete the pick shift,,,,,,,,,,,,
+,,,Step 3: Navigate to INV screen,,,,,,,,,,,,
+,,,Step 4: Verify IP displays 0,,,,,,,,,,,,
+Verify keypad rejects alphabetic input,Validate that system rejects or ignores alphabetic characters entered via keypad,Remove Adjustment screen with keypad open,"Step 1: Open keypad
+Step 2: Attempt to enter ""ABC"" via keypad
+Step 3: Verify system rejects or ignores alphabetic input
+Step 4: Verify quantity field remains unchanged","Keypad input: ""ABC""
+Updated QOH: 50",System rejects alphabetic input; quantity unchanged,Negative,Remove Adjustment,,,,,,,,"REQ-007,TS-030"
+,,,,"Step 2: Attempt to enter ""ABC"" via keypad",,,,,,,,,,,,
+,,,Step 3: Verify system rejects or ignores alphabetic input,,,,,,,,,,,,
+,,,Step 4: Verify quantity field remains unchanged,,,,,,,,,,,,
+Verify keypad rejects special characters,Validate that system rejects or ignores special characters entered via keypad,Remove Adjustment screen with keypad open,"Step 1: Open keypad
+Step 2: Attempt to enter ""@#$"" via keypad
+Step 3: Verify system rejects or ignores special characters
+Step 4: Verify quantity field remains unchanged","Keypad input: ""@#$""
+Updated QOH: 50",System rejects special characters; quantity unchanged,Negative,Remove Adjustment,,,,,,,,"REQ-007,TS-031"
+,,,,"Step 2: Attempt to enter ""@#$"" via keypad",,,,,,,,,,,,
+,,,Step 3: Verify system rejects or ignores special characters,,,,,,,,,,,,
+,,,Step 4: Verify quantity field remains unchanged,,,,,,,,,,,,
+Verify keypad rejects negative number entry,Validate that system rejects or adjusts negative numbers entered via keypad,Remove Adjustment screen with keypad open,"Step 1: Open keypad
+Step 2: Attempt to enter ""-10"" via keypad
+Step 3: Verify system rejects negative input or adjusts to 0","Keypad input: ""-10""
+Updated QOH: 50",System rejects negative input or adjusts to 0,Negative,Remove Adjustment,,,,,,,,"REQ-007,TS-032"
+,,,,"Step 2: Attempt to enter ""-10"" via keypad",,,,,,,,,,,,
+,,,Step 3: Verify system rejects negative input or adjusts to 0,,,,,,,,,,,,
+Verify keypad handles decimal entry,Validate system behavior when decimal values are entered if system expects integers,Remove Adjustment screen with keypad open,"Step 1: Open keypad
+Step 2: Enter ""5.5"" via keypad
+Step 3: Verify system rounds or rejects decimal input","Keypad input: ""5.5""
+Updated QOH: 50
+Expected behavior: Round or reject",System handles decimal gracefully (rounds to 6 or rejects),Negative,Remove Adjustment,,,,,,,,"REQ-007,TS-033"
+,,,,"Step 2: Enter ""5.5"" via keypad",,,,,,,,,,,,
+,,,Step 3: Verify system rounds or rejects decimal input,,,,,,,,,,,,
+Verify behavior when QOH_original is zero,Validate system behavior when item has zero quantity on hand,Item with QOH_original = 0 and no pick shift,"Step 1: Navigate to INV screen
+Step 2: Select item ITEM-006 with QOH = 0
+Step 3: Attempt to access Remove Adjustment
+Step 4: Verify adjustment is not possible or quantity = 0","Item ID: ITEM-006
+QOH_original: 0
+IP: 0
+QOH_new: 0","Remove Adjustment not possible, or max removable = 0",Edge,Remove Adjustment,,,,,,,,"REQ-003,TS-034"
+,,,Step 2: Select item ITEM-006 with QOH = 0,,,,,,,,,,,,
+,,,Step 3: Attempt to access Remove Adjustment,,,,,,,,,,,,
+,,,Step 4: Verify adjustment is not possible or quantity = 0,,,,,,,,,,,,
+Verify behavior with very large IP value,Validate system handles very large IP values correctly in QOH calculation,Item with QOH_original = 10000 and order release for 9999 units,"Step 1: Note QOH_original = 10000
+Step 2: Trigger order release for 9999 units
+Step 3: Verify QOH_new = 1
+Step 4: Navigate to Remove Adjustment
+Step 5: Verify max removable quantity = 1","QOH_original: 10000
+IP: 9999
+Expected QOH_new: 1
+Max removable: 1","System calculates correctly: QOH_new = 1, max removable = 1",Edge,INV Screen,,,,,,,,"REQ-003,TS-035"
+,,,Step 2: Trigger order release for 9999 units,,,,,,,,,,,,
+,,,Step 3: Verify QOH_new = 1,,,,,,,,,,,,
+,,,Step 4: Navigate to Remove Adjustment,,,,,,,,,,,,
+,,,Step 5: Verify max removable quantity = 1,,,,,,,,,,,,
+Verify rapid Plus button clicks,Validate system handles rapid button clicks correctly and respects max limit,Remove Adjustment screen with updated QOH = 80,"Step 1: Set initial quantity to 70
+Step 2: Click Plus button rapidly 20 times
+Step 3: Verify quantity updates correctly and stops at 80","Initial quantity: 70
+Clicks: 20 rapid Plus clicks
+Updated QOH: 80",Quantity updates correctly and stops at limit (80),Edge,Remove Adjustment,,,,,,,,"REQ-006,TS-036"
+,,,Step 2: Click Plus button rapidly 20 times,,,,,,,,,,,,
+,,,Step 3: Verify quantity updates correctly and stops at 80,,,,,,,,,,,,
+Verify adjustment at exact updated QOH,Validate system allows removal of exact updated QOH quantity resulting in QOH = 0,Item with updated QOH = 50,"Step 1: Navigate to Remove Adjustment
+Step 2: Enter 50 via keypad (exact updated QOH)
+Step 3: Confirm adjustment
+Step 4: Verify QOH becomes 0 after adjustment","Updated QOH: 50
+Adjustment: 50
+Expected final QOH: 0","Adjustment succeeds, QOH becomes 0",Edge,Remove Adjustment,,,,,,,,"REQ-008,TS-037"
+,,,Step 2: Enter 50 via keypad (exact updated QOH),,,,,,,,,,,,
+,,,Step 3: Confirm adjustment,,,,,,,,,,,,
+,,,Step 4: Verify QOH becomes 0 after adjustment,,,,,,,,,,,,
+Verify concurrent adjustments handling,Validate system handles concurrent Remove operations by multiple users on same item,Two users accessing same item simultaneously,"Step 1: User A opens Remove Adjustment for ITEM-001
+Step 2: User B opens Remove Adjustment for ITEM-001
+Step 3: User A submits adjustment (remove 10)
+Step 4: User B attempts to submit adjustment
+Step 5: Verify system handles concurrency correctly","Item ID: ITEM-001
+Initial QOH: 100
+User A adjustment: 10
+User B adjustment: 5","System applies proper locking or optimistic concurrency control",Edge,Remove Adjustment,,,,,,,,"REQ-011,TS-038"
+,,,Step 2: User B opens Remove Adjustment for ITEM-001,,,,,,,,,,,,
+,,,Step 3: User A submits adjustment (remove 10),,,,,,,,,,,,
+,,,Step 4: User B attempts to submit adjustment,,,,,,,,,,,,
+,,,Step 5: Verify system handles concurrency correctly,,,,,,,,,,,,
+Verify IP sync from order system to inventory,Validate that IP data is correctly synced from Order Management System to Inventory System,Order release is triggered in Order Management System,"Step 1: Trigger order release in Order Management System
+Step 2: Verify IP data is sent to Inventory System
+Step 3: Navigate to INV screen
+Step 4: Verify IP is displayed correctly","Order quantity: 30
+Item ID: ITEM-003",Inventory System receives and displays IP = 30,Integration,INV Screen,,,,,,,,"REQ-002,TS-039"
+,,,Step 2: Verify IP data is sent to Inventory System,,,,,,,,,,,,
+,,,Step 3: Navigate to INV screen,,,,,,,,,,,,
+,,,Step 4: Verify IP is displayed correctly,,,,,,,,,,,,
+Verify adjustment API call to backend,Validate that frontend sends correct adjustment request to backend API,User confirms adjustment on Remove Adjustment screen,"Step 1: Open Remove Adjustment screen
+Step 2: Set adjustment quantity to 15
+Step 3: Click Confirm
+Step 4: Verify frontend sends adjustment request to backend API
+Step 5: Verify backend responds with success","Adjustment quantity: 15
+Item ID: ITEM-001",Backend processes request and responds with success,Integration,Remove Adjustment,,,,,,,,"REQ-010,TS-040"
+,,,Step 2: Set adjustment quantity to 15,,,,,,,,,,,,
+,,,Step 3: Click Confirm,,,,,,,,,,,,
+,,,Step 4: Verify frontend sends adjustment request to backend API,,,,,,,,,,,,
+,,,Step 5: Verify backend responds with success,,,,,,,,,,,,
+Verify database update after adjustment,Validate that database is updated with new QOH value after adjustment,Backend has processed adjustment successfully,"Step 1: Note QOH before adjustment = 100
+Step 2: Complete adjustment (remove 20)
+Step 3: Query database directly
+Step 4: Verify database reflects new QOH = 80","Item ID: ITEM-001
+QOH before: 100
+Adjustment: 20
+Expected DB QOH: 80",Database shows QOH = 80,Integration,Database,,,,,,,,"REQ-011,TS-041"
+,,,Step 2: Complete adjustment (remove 20),,,,,,,,,,,,
+,,,Step 3: Query database directly,,,,,,,,,,,,
+,,,Step 4: Verify database reflects new QOH = 80,,,,,,,,,,,,
+Verify error handling when order system down,Validate system behavior when Order Management System is unavailable,Order Management System is down or unreachable,"Step 1: Simulate Order Management System downtime
+Step 2: Navigate to INV screen
+Step 3: Verify IP displays last known value or error message
+Step 4: Verify system provides appropriate error feedback",Order System: Unavailable,"System displays last known IP or shows error message gracefully",Integration,INV Screen,,,,,,,,"REQ-002,TS-042"
+,,,Step 2: Navigate to INV screen,,,,,,,,,,,,
+,,,Step 3: Verify IP displays last known value or error message,,,,,,,,,,,,
+,,,Step 4: Verify system provides appropriate error feedback,,,,,,,,,,,,
+E2E: Order release to adjustment with IP greater than 0,End-to-end test covering order release through successful adjustment,Item exists with initial QOH = 100 and no pick shift,"Step 1: Verify initial state (QOH = 100, IP = 0)
+Step 2: Trigger order release for 30 units
+Step 3: Verify IP = 30, QOH_new = 70 on INV screen
+Step 4: Navigate to Remove Adjustment
+Step 5: Enter 20 via keypad
+Step 6: Confirm adjustment
+Step 7: Verify success snackbar
+Step 8: Verify final QOH = 50 on INV screen","Item ID: ITEM-001
+Initial QOH: 100
+Order: 30 units
+Adjustment: 20
+Expected final QOH: 50","Complete E2E flow succeeds: IP=30, QOH adjusted from 70 to 50",E2E,Full System,,,,,,,,"REQ-002,REQ-003,REQ-011"
+,,,"Step 2: Trigger order release for 30 units",,,,,,,,,,,,
+,,,"Step 3: Verify IP = 30, QOH_new = 70 on INV screen",,,,,,,,,,,,
+,,,Step 4: Navigate to Remove Adjustment,,,,,,,,,,,,
+,,,Step 5: Enter 20 via keypad,,,,,,,,,,,,
+,,,Step 6: Confirm adjustment,,,,,,,,,,,,
+,,,Step 7: Verify success snackbar,,,,,,,,,,,,
+,,,Step 8: Verify final QOH = 50 on INV screen,,,,,,,,,,,,
+E2E: Adjustment on item with no pick shift,End-to-end test for adjustment on item without pick shift,Item exists with QOH = 100 and no pick shift (IP = 0),"Step 1: Verify initial state (QOH = 100, IP = 0)
+Step 2: Navigate to home screen
+Step 3: Select Remove option
+Step 4: Verify Remove Adjustment screen opens
+Step 5: Enter 20 via keypad
+Step 6: Confirm adjustment
+Step 7: Verify success snackbar appears
+Step 8: Verify final QOH = 80 on INV screen","Item ID: ITEM-002
+Initial QOH: 100
+IP: 0
+Adjustment: 20
+Expected final QOH: 80",Complete E2E flow succeeds without pick shift: QOH adjusted from 100 to 80,E2E,Full System,,,,,,,,"REQ-005,REQ-007,REQ-010,REQ-011"
+,,,"Step 1: Verify initial state (QOH = 100, IP = 0)",,,,,,,,,,,,
+,,,Step 2: Navigate to home screen,,,,,,,,,,,,
+,,,Step 3: Select Remove option,,,,,,,,,,,,
+,,,Step 4: Verify Remove Adjustment screen opens,,,,,,,,,,,,
+,,,Step 5: Enter 20 via keypad,,,,,,,,,,,,
+,,,Step 6: Confirm adjustment,,,,,,,,,,,,
+,,,Step 7: Verify success snackbar appears,,,,,,,,,,,,
+,,,Step 8: Verify final QOH = 80 on INV screen,,,,,,,,,,,,
+E2E: Adjustment exceeding limit with auto-correct,End-to-end test for auto-correction when user exceeds max allowable quantity,Item with QOH_original = 100; order released for 60 units,"Step 1: Verify QOH_original = 100, IP = 60, QOH_new = 40
+Step 2: Navigate to Remove Adjustment
+Step 3: Enter 50 via keypad (exceeds limit)
+Step 4: Verify system auto-corrects to 40
+Step 5: Confirm adjustment
+Step 6: Verify success snackbar
+Step 7: Verify final QOH = 0 on INV screen","QOH_original: 100
+IP: 60
+QOH_new: 40
+Keypad entry: 50
+Auto-corrected: 40
+Expected final QOH: 0",Complete E2E flow with auto-correction: Input 50 → adjusted to 40 → QOH becomes 0,E2E,Full System,,,,,,,,"REQ-003,REQ-009,REQ-010,REQ-011"
+,,,"Step 1: Verify QOH_original = 100, IP = 60, QOH_new = 40",,,,,,,,,,,,
+,,,Step 2: Navigate to Remove Adjustment,,,,,,,,,,,,
+,,,Step 3: Enter 50 via keypad (exceeds limit),,,,,,,,,,,,
+,,,Step 4: Verify system auto-corrects to 40,,,,,,,,,,,,
+,,,Step 5: Confirm adjustment,,,,,,,,,,,,
+,,,Step 6: Verify success snackbar,,,,,,,,,,,,
+,,,Step 7: Verify final QOH = 0 on INV screen,,,,,,,,,,,,
+Regression: Verify blocker is not reintroduced,Validate that previously removed blocker for items with pick shifts has not reappeared,Item tied to active pick shift,"Step 1: Select item with IP > 0
+Step 2: Navigate to Remove Adjustment
+Step 3: Verify no blocker or warning message appears
+Step 4: Verify adjustment flow proceeds normally","Item ID: ITEM-003
+IP: 20","No blocker displayed, adjustment proceeds",Regression,Remove Adjustment,,,,,,,,"REQ-004,TS-046"
+,,,Step 2: Navigate to Remove Adjustment,,,,,,,,,,,,
+,,,Step 3: Verify no blocker or warning message appears,,,,,,,,,,,,
+,,,Step 4: Verify adjustment flow proceeds normally,,,,,,,,,,,,
+Regression: Verify existing QOH display functionality,Validate that existing QOH display on INV screen continues to work correctly,INV screen is loaded with items,"Step 1: Navigate to INV screen
+Step 2: Select various items
+Step 3: Verify QOH value is displayed correctly for each item",Various items in inventory,QOH displayed correctly for all items,Regression,INV Screen,,,,,,,,"REQ-003,TS-047"
+,,,Step 2: Select various items,,,,,,,,,,,,
+,,,Step 3: Verify QOH value is displayed correctly for each item,,,,,,,,,,,,
+Regression: Verify IP display after multiple order releases,Validate IP updates correctly after multiple consecutive order releases,Item with initial QOH = 200,"Step 1: Note initial QOH = 200, IP = 0
+Step 2: Trigger first order release (30 units)
+Step 3: Verify IP = 30, QOH = 170
+Step 4: Trigger second order release (50 units)
+Step 5: Verify IP = 80, QOH = 120","QOH_original: 200
+First order: 30
+Second order: 50
+Total IP: 80
+Expected QOH: 120",IP and QOH update correctly after multiple releases,Regression,INV Screen,,,,,,,,"REQ-002,REQ-003"
+,,,Step 2: Trigger first order release (30 units),,,,,,,,,,,,
+,,,"Step 3: Verify IP = 30, QOH = 170",,,,,,,,,,,,
+,,,Step 4: Trigger second order release (50 units),,,,,,,,,,,,
+,,,"Step 5: Verify IP = 80, QOH = 120",,,,,,,,,,,,
+Regression: Verify adjustment with Plus and Minus buttons still works,Validate that Plus and Minus button functionality remains intact,Remove Adjustment screen,"Step 1: Navigate to Remove Adjustment
+Step 2: Click Plus button 5 times
+Step 3: Verify quantity increases by 5
+Step 4: Click Minus button 2 times
+Step 5: Verify quantity decreases by 2
+Step 6: Verify final quantity is correct","Initial quantity: 0
+Plus clicks: 5
+Minus clicks: 2
+Expected final: 3",Plus/Minus buttons work correctly; final quantity = 3,Regression,Remove Adjustment,,,,,,,,"REQ-006,TS-012,TS-013"
+,,,Step 2: Click Plus button 5 times,,,,,,,,,,,,
+,,,Step 3: Verify quantity increases by 5,,,,,,,,,,,,
+,,,Step 4: Click Minus button 2 times,,,,,,,,,,,,
+,,,Step 5: Verify quantity decreases by 2,,,,,,,,,,,,
+,,,Step 6: Verify final quantity is correct,,,,,,,,,,,,
+Smoke: Critical path - View IP and perform adjustment,Smoke test covering critical user journey from viewing IP to completing adjustment,Item with QOH = 100 and order released for 20 units,"Step 1: Navigate to INV screen
+Step 2: Verify IP = 20 is displayed
+Step 3: Verify QOH = 80 is displayed
+Step 4: Navigate to home screen
+Step 5: Click Remove option
+Step 6: Enter 10 via keypad
+Step 7: Click Confirm
+Step 8: Verify success message","QOH_original: 100
+IP: 20
+QOH_new: 80
+Adjustment: 10
+Final QOH: 70",Critical path completes successfully,Smoke,Full System,,,,,,,,"REQ-001,REQ-003,REQ-005,REQ-010"
+,,,Step 2: Verify IP = 20 is displayed,,,,,,,,,,,,
+,,,Step 3: Verify QOH = 80 is displayed,,,,,,,,,,,,
+,,,Step 4: Navigate to home screen,,,,,,,,,,,,
+,,,Step 5: Click Remove option,,,,,,,,,,,,
+,,,Step 6: Enter 10 via keypad,,,,,,,,,,,,
+,,,Step 7: Click Confirm,,,,,,,,,,,,
+,,,Step 8: Verify success message,,,,,,,,,,,,
+Smoke: Quick validation of IP equals 0 scenario,Smoke test for IP = 0 display and adjustment,Item with no pick shift (IP = 0),"Step 1: Navigate to INV screen
+Step 2: Verify IP displays 0
+Step 3: Note QOH value
+Step 4: Perform quick adjustment
+Step 5: Verify success","Item ID: ITEM-001
+IP: 0
+QOH: 100","IP = 0 displays correctly, adjustment succeeds",Smoke,INV Screen,,,,,,,,"REQ-012,TS-028"
+,,,Step 2: Verify IP displays 0,,,,,,,,,,,,
+,,,Step 3: Note QOH value,,,,,,,,,,,,
+,,,Step 4: Perform quick adjustment,,,,,,,,,,,,
+,,,Step 5: Verify success,,,,,,,,,,,,
+Smoke: Verify auto-adjust functionality works,Smoke test for keypad auto-adjustment to max limit,Remove Adjustment screen with updated QOH = 30,"Step 1: Open Remove Adjustment
+Step 2: Enter 100 via keypad
+Step 3: Verify system auto-adjusts to 30","Updated QOH: 30
+Keypad entry: 100
+Expected: 30",System auto-adjusts to max limit (30),Smoke,Remove Adjustment,,,,,,,,"REQ-009,TS-020"
+,,,Step 2: Enter 100 via keypad,,,,,,,,,,,,
+,,,Step 3: Verify system auto-adjusts to 30,,,,,,,,,,,,
