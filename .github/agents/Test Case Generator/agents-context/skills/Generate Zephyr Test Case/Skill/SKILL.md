@@ -76,12 +76,39 @@ Generate test cases for **ALL** of the following types:
 - **Negative**: 15-20% of total test cases
 - **Edge**: 10-15% of total test cases
 
-#### 2.3 CSV Format Requirements
-- Convert test scenarios from the Test Plan into structured test cases.
-- Generate test cases using ZephyrTestCaseTemplate.csv
-- Each test case must start on a single row with all test metadata populated:
+#### 2.3 CSV Format Requirements - MANDATORY TEMPLATE ENFORCEMENT
 
-  Name, Objective, Pre-condition, Test Step (Step 1), Test Data, Test Result, Labels,Components,QA Engineer, Fix versions, Affect versions, Automated, API, Jira, Sub Domain,Requirement ID.
+**CRITICAL: Strict Template Compliance Required**
+
+**Template Location (READ THIS FILE FIRST):**
+- **Mandatory Template Path:** `.github\agents\Test Case Generator\agents-context\skills\Test Case\Template\ZephyrTestCaseTemplate.csv`
+- **You MUST read this template file before generating any CSV**
+- **The template contains the EXACT column headers that MUST be used**
+
+**MANDATORY Column Headers (In Exact Order):**
+The generated CSV MUST contain these 16 columns in this exact order:
+
+1. Name
+2. Objective
+3. Pre-condition
+4. Test Step
+5. Test Data
+6. Test Result
+7. Labels
+8. Components
+9. QA Engineer
+10. Fix versions
+11. Affect versions
+12. Automated
+13. API
+14. Jira
+15. Sub Domain
+16. Requirement ID
+
+
+**CSV Generation Rules:**
+- Convert test scenarios from the Test Plan into structured test cases using ONLY the template columns
+- Each test case must start on a single row with all test metadata populated in the template columns
 
 - **IMPORTANT:** The "Sub Domain" column must always be left blank (empty) for all test cases.
 - If a test case has more than one step:
@@ -175,14 +202,53 @@ The "Requirement ID" column MUST contain ONE Requirement ID and ONE Test Scenari
 - **Full path example**: `.github\agents\Test Case Generator\agents-context\ZephyrReadyTestCases\Spectrum_Brand_Manager_Zephyrimportready.csv`
 - Example: If Test Plan is "Spectrum_Brand_Manager_TestPlan.md", CSV file should be "Spectrum_Brand_Manager_Zephyrimportready.csv"
 
+### 3.1 Pre-Generation Template Validation (MANDATORY)
+**Before generating any CSV file, you MUST:**
+
+1. **Read the Template File:**
+   ```
+   Path: .github\agents\Test Case Generator\agents-context\skills\Test Case\Template\ZephyrTestCaseTemplate.csv
+   ```
+
+2. **Extract Template Headers:**
+   - Read line 1 of the template
+   - Store the exact column headers
+   - Count must equal 16 columns
+
+3. **Use Template Headers in Output:**
+   - Use the extracted headers as the first row of your generated CSV
+   - Do NOT hardcode headers
+   - Do NOT add, remove, or modify any column headers
+
+4. **Validation Check:**
+   - After generation, verify your CSV has exactly 16 columns
+   - Verify the header row matches the template exactly
+   - If validation fails: DO NOT save the file and report the error
+
+**Example Validation Logic:**
+```
+IF generated_csv_headers != template_headers THEN
+    ERROR: "CSV does not match ZephyrTestCaseTemplate.csv format"
+    ERROR: "Expected 16 columns, got X columns"
+    ERROR: "Missing columns: [list]"
+    ERROR: "Extra columns: [list]"
+    ABORT: Do not save the file
+END IF
+```
+
 ---
 
 ### 4. Response Format
 - Respond with the project name followed by "Zephyrimportready.csv created in .github\agents\Test Case Generator\agents-context\ZephyrReadyTestCases"
+- **MANDATORY: Include template validation confirmation**
 - Include summary of test case types generated
 - Example response:
   ```
   # Spectrum Brand Manager - Zephyrimportready.csv created in .github\agents\Test Case Generator\agents-context\ZephyrReadyTestCases
+  
+  ✅ Template Validation: PASSED
+     - Using ZephyrTestCaseTemplate.csv (16 columns)
+     - All headers match template exactly
   
   ✅ Test Cases Generated: 65 test cases covering:
      - Functional: 25 test cases
@@ -193,3 +259,13 @@ The "Requirement ID" column MUST contain ONE Requirement ID and ONE Test Scenari
      - Negative: 6 test cases
      - Edge: 4 test cases
   ```
+  
+### 5. Quality Checklist (MUST VERIFY BEFORE COMPLETING)
+Before reporting completion, verify:
+- [ ] Template file was read from correct path
+- [ ] Generated CSV has exactly 16 columns
+- [ ] Column headers match template exactly (case-sensitive)
+- [ ] No extra columns added (like Priority, Owner, Status, etc.)
+- [ ] No columns removed or renamed
+- [ ] Sub Domain column is empty for all rows
+- [ ] File saved to correct location: `.github\agents\Test Case Generator\agents-context\ZephyrReadyTestCases\`
