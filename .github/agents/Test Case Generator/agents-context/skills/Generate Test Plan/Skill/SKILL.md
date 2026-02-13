@@ -103,7 +103,6 @@ Group scenarios by:
 
 #### 2.12 Test Levels and Types
 -Functional,Smoke, API, UI, integration, end-to-end, regression.
-- Manual vs automated test scope.
 
 #### 2.13 Risk-Based Testing
 - High-risk areas identified from requirements.

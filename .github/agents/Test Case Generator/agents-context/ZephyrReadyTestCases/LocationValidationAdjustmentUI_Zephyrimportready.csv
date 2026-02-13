@@ -1,0 +1,74 @@
+Name,Objective,Pre-condition,Test Step,Test Data,Test Result,Labels,Components,QA Engineer,Fix versions,Affect versions,Automated,API,Jira,Sub Domain,Requirement ID
+Verify Title Display When Flag is True,Verify that the adjustment screen displays correct title 'Scan location' when locationValidationRequired flag is set to true,locationValidationRequired flag is set to true in system configuration,1. Navigate to adjustment workflow,TD-001: locationValidationRequired=true,Navigate successfully to adjustment workflow,"Functional,Regression",UI/Adjustment Screen,,,,,No,,,,"REQ-001,TS-001"
+,,,2. Observe screen title,,Title displays 'Scan location',,,,,,,,,,,
+Verify Title Display When Flag is False,Verify that the adjustment screen displays correct title 'Input adjustment and move items' when locationValidationRequired flag is set to false,locationValidationRequired flag is set to false in system configuration,1. Navigate to adjustment workflow,TD-002: locationValidationRequired=false,Navigate successfully to adjustment workflow,"Functional,Regression",UI/Adjustment Screen,,,,,No,,,,"REQ-001,TS-002"
+,,,2. Observe screen title,,Title displays 'Input adjustment and move items',,,,,,,,,,,
+Verify Title When Flag is Unset or Null,Verify system behavior when locationValidationRequired flag is null or undefined,locationValidationRequired flag is null or undefined,1. Remove or unset locationValidationRequired flag from configuration,TD-003: locationValidationRequired=null,Flag is successfully unset,"Negative,Functional",UI/Adjustment Screen,,,,,No,,,,"REQ-001,TS-003"
+,,,2. Navigate to adjustment workflow,,System handles gracefully with default behavior or appropriate error message,,,,,,,,,,,
+Complete Location Scan Flow When Flag is True,Verify end-to-end flow from location scan to adjustment screen when flag is true,locationValidationRequired flag is set to true. User has necessary permissions.,1. Navigate to adjustment workflow,TD-001: locationValidationRequired=true,Adjustment workflow loads successfully,"E2E,Functional",Workflow/E2E,,,,,No,,,,"REQ-002,TS-004"
+,,,2. Verify 'Scan location' title is displayed,,Title 'Scan location' is displayed correctly,,,,,,,,,,,
+,,,3. Complete location scan by scanning valid location,Valid location barcode,Location scan completes successfully,,,,,,,,,,,
+,,,4. Verify navigation to adjustment screen,,Navigates to adjustment screen automatically,,,,,,,,,,,
+,,,5. Verify adjustment screen title is 'Input adjustment and move items',,Title 'Input adjustment and move items' is displayed,,,,,,,,,,,
+Attempt to Skip Location Scan When Flag is True,Verify that user cannot bypass location scan when locationValidationRequired is true,locationValidationRequired flag is set to true. Location scan screen is displayed.,1. Navigate to adjustment workflow,TD-001: locationValidationRequired=true,Adjustment workflow displays location scan screen,"Negative,E2E",Security/Workflow,,,,,No,,,,"REQ-004,TS-005"
+,,,2. Attempt to bypass location scan screen (e.g. browser back or URL manipulation),,Bypass attempt is blocked,,,,,,,,,,,
+,,,3. Try to access adjustment screen directly,Direct URL or navigation attempt,System prevents access; user must complete location scan,,,,,,,,,,,
+Direct Access to Adjustment Screen When Flag is False,Verify user can directly access adjustment screen without location scan when flag is false,locationValidationRequired flag is set to false,1. Navigate to adjustment workflow,TD-002: locationValidationRequired=false,Adjustment workflow loads successfully,"E2E,Smoke",Workflow/E2E,,,,,No,,,,"REQ-003,TS-006"
+,,,2. Verify screen displays 'Input adjustment and move items' title,,Title is displayed correctly,,,,,,,,,,,
+,,,3. Verify no location scan screen is shown,,Location scan screen is not displayed; direct access to adjustment screen,,,,,,,,,,,
+Verify Location Scan Screen Not Displayed When Flag is False,Verify that location scan screen is completely bypassed when flag is false,locationValidationRequired flag is set to false,1. Navigate to adjustment workflow,TD-002: locationValidationRequired=false,Navigate to adjustment workflow,"Functional,Smoke",UI/Workflow,,,,,No,,,,"REQ-005,TS-007"
+,,,2. Check for location scan screen in navigation flow,,Location scan screen is not displayed at any point,,,,,,,,,,,
+Integration Between Location Scan and Adjustment Screen,Verify data is correctly passed from location scan to adjustment screen,locationValidationRequired flag is set to true. Valid location data available.,1. Complete location scan with valid location,TD-001: locationValidationRequired=true with valid location data,Location scan completes successfully,"Integration,Functional",Integration,,,,,No,,,,"REQ-004,TS-008"
+,,,2. Verify data passed to adjustment screen,,Location data is passed to adjustment screen,,,,,,,,,,,
+,,,3. Verify adjustment screen receives location context correctly,,Adjustment screen displays location context; operations are scoped to scanned location,,,,,,,,,,,
+Multiple Location Scans in Same Session When Flag is True,Verify that repeated location scans in same session maintain correct flow and titles,locationValidationRequired flag is set to true. User is authenticated.,1. Complete location scan and adjustment for first location,TD-001: locationValidationRequired=true with Location A and Location B data,First iteration completes successfully with 'Scan location' title,"Regression,Functional",Workflow,,,,,No,,,,"REQ-002,TS-009"
+,,,2. Navigate back to workflow to scan different location,,Workflow restarts correctly,,,,,,,,,,,
+,,,3. Repeat location scan for second location,Location B,Second location scan completes successfully,,,,,,,,,,,
+,,,4. Verify each iteration maintains correct title and flow,,Both iterations show correct titles at each step; no state leak between iterations,,,,,,,,,,,
+Navigation Performance When Flag is False,Verify adjustment screen loads within acceptable performance threshold when flag is false,locationValidationRequired flag is set to false. Test environment is stable.,1. Navigate to adjustment workflow,TD-002: locationValidationRequired=false,Adjustment workflow initiates,"Smoke,Functional",Performance,,,,,No,,,,"REQ-005,TS-010"
+,,,2. Measure time from navigation start to adjustment screen display,Performance monitoring tool enabled,Screen displays within acceptable performance threshold (e.g. < 3 seconds),,,,,,,,,,,
+Back Navigation When Flag is False,Verify back navigation works correctly when accessing adjustment screen directly (flag is false),locationValidationRequired flag is set to false. User is on adjustment screen.,1. Navigate to and access adjustment screen,TD-002: locationValidationRequired=false,Adjustment screen is displayed,Functional,Navigation/UI,,,,,No,,,,"REQ-005,TS-011"
+,,,2. Press back button or use back navigation,,System navigates back to previous screen (not location scan screen),,,,,,,,,,,
+,,,3. Verify location scan screen is not shown in back navigation,,Location scan screen is not in navigation history,,,,,,,,,,,
+UI Consistency - Title Text Matches Specification,Verify title text matches exact specification for both flag states,None,1. Set locationValidationRequired flag to true,TD-001: locationValidationRequired=true,Flag set successfully,"Functional,Regression",UI/Compliance,,,,,No,,,,"REQ-006,TS-012"
+,,,2. Navigate to adjustment workflow and verify exact text: 'Scan location',,Exact text 'Scan location' is displayed (case-sensitive with no extra spaces),,,,,,,,,,,
+,,,3. Set locationValidationRequired flag to false,TD-002: locationValidationRequired=false,Flag set successfully,,,,,,,,,,,
+,,,4. Navigate to adjustment workflow and verify exact text: 'Input adjustment and move items',,Exact text 'Input adjustment and move items' is displayed (case-sensitive with spacing accurate),,,,,,,,,,,
+UI Consistency - Title Formatting,Verify title formatting is consistent regardless of flag value,None,1. Set locationValidationRequired flag to true and observe title formatting,TD-001: locationValidationRequired=true,Title displayed with consistent font size color alignment,Functional,UI/Consistency,,,,,No,,,,"REQ-006,TS-013"
+,,,2. Record title font size color and alignment,,Formatting parameters recorded,,,,,,,,,,,
+,,,3. Set locationValidationRequired flag to false and observe title formatting,TD-002: locationValidationRequired=false,Title displayed with same formatting parameters,,,,,,,,,,,
+,,,4. Compare formatting between both states,,Formatting is identical (only text content differs),,,,,,,,,,,
+Flag Value Change During Runtime,Verify system handles flag value change during active workflow session,User is in adjustment workflow with flag initially set to true. System allows runtime configuration changes.,1. Start workflow with locationValidationRequired=true,TD-005: Runtime change true to false,Workflow starts with 'Scan location' title,"Integration,Negative",Integration/Workflow,,,,,No,,,,"REQ-007,TS-014"
+,,,2. Complete location scan,Valid location barcode,Location scan completes successfully,,,,,,,,,,,
+,,,3. Change locationValidationRequired flag to false programmatically during session,TD-005: flag changed to false at runtime,Flag value updated successfully,,,,,,,,,,,
+,,,4. Observe system behavior and subsequent workflow navigation,,System handles flag change gracefully without errors or crashes; subsequent workflow respects new flag value,,,,,,,,,,,
+Invalid Flag Values,Verify system handles invalid locationValidationRequired flag values gracefully,None,1. Set locationValidationRequired to invalid string value 'true' (as string not boolean),TD-004: locationValidationRequired='true' (string),Flag set to invalid value,"Negative,Edge",Validation,,,,,No,,,,"REQ-007,TS-015"
+,,,2. Navigate to adjustment workflow and observe behavior,,System handles with default behavior or validation error,,,,,,,,,,,
+,,,3. Set locationValidationRequired to object {},TD-004: locationValidationRequired={},Flag set to invalid object,,,,,,,,,,,
+,,,4. Navigate to adjustment workflow,,System handles with default behavior or validation error,,,,,,,,,,,
+,,,5. Set locationValidationRequired to negative number -1,TD-004: locationValidationRequired=-1,Flag set to negative number,,,,,,,,,,,
+,,,6. Navigate to adjustment workflow,,System handles with default behavior or validation error; no system crash,,,,,,,,,,,
+Accessibility - Screen Reader Support,Verify screen reader correctly announces titles for both flag states,Screen reader is enabled. User has accessibility requirements.,1. Enable screen reader software,TD-001 and TD-002,Screen reader is active,Functional,Accessibility,,,,,No,,,,"REQ-006,TS-016"
+,,,2. Set locationValidationRequired to true and navigate to adjustment workflow,TD-001: locationValidationRequired=true,Workflow loads with 'Scan location' title,,,,,,,,,,,
+,,,3. Verify screen reader announces 'Scan location',,Screen reader correctly announces 'Scan location' with proper focus,,,,,,,,,,,
+,,,4. Set locationValidationRequired to false and navigate to adjustment workflow,TD-002: locationValidationRequired=false,Workflow loads with 'Input adjustment and move items' title,,,,,,,,,,,
+,,,5. Verify screen reader announces 'Input adjustment and move items',,Screen reader correctly announces full title with proper focus,,,,,,,,,,,
+Internationalization - Title Display in Different Languages,Verify titles display correctly in supported non-English languages,System is configured to support multiple languages. Language packs are installed.,1. Change system language to supported non-English locale (e.g. Spanish),Language set to Spanish (es-ES),System language changes successfully,"Functional,Edge",Internationalization,,,,,No,,,,"REQ-006,TS-017"
+,,,2. Set locationValidationRequired to true and verify title in Spanish,TD-001: locationValidationRequired=true,Title displays correctly in Spanish (e.g. 'Escanear ubicación'),,,,,,,,,,,
+,,,3. Set locationValidationRequired to false and verify title in Spanish,TD-002: locationValidationRequired=false,Title displays correctly in Spanish (e.g. 'Ingresar ajuste y mover artículos'),,,,,,,,,,,
+,,,4. Repeat for another supported language (e.g. French),Language set to French (fr-FR),Titles display correctly in French with proper translations,,,,,,,,,,,
+Concurrent Users with Different Flag Values,Verify multiple users with different flag values see correct titles simultaneously,Multi-user test environment. User A and User B accounts configured.,1. Configure User A with locationValidationRequired=true,TD-006: User A flag=true User B flag=false,User A configuration set successfully,"Integration,Functional",Integration/Multi-User,,,,,No,,,,"REQ-001,TS-018"
+,,,2. Configure User B with locationValidationRequired=false,,User B configuration set successfully,,,,,,,,,,,
+,,,3. User A navigates to adjustment workflow,,User A sees 'Scan location' title,,,,,,,,,,,
+,,,4. User B navigates to adjustment workflow simultaneously,,User B sees 'Input adjustment and move items' title,,,,,,,,,,,
+,,,5. Verify both users see correct titles based on their individual flag values,,Each user sees correct title; no cross-contamination of flag values between users,,,,,,,,,,,
+Flag Configuration Persistence,Verify locationValidationRequired flag value persists across user sessions,User account with locationValidationRequired configured,1. Set locationValidationRequired flag to false for user account,TD-002: locationValidationRequired=false,Flag set successfully for user,"Regression,Functional",Configuration,,,,,No,,,,"REQ-001,TS-019"
+,,,2. Navigate to adjustment workflow and verify title,,Title displays 'Input adjustment and move items',,,,,,,,,,,
+,,,3. Complete adjustment workflow,Adjustment data,Adjustment completes successfully,,,,,,,,,,,
+,,,4. Logout from system,,User logged out successfully,,,,,,,,,,,
+,,,5. Login again with same user account,User credentials,User logged in successfully,,,,,,,,,,,
+,,,6. Navigate to adjustment workflow again,,Flag value persists; title still displays 'Input adjustment and move items',,,,,,,,,,,
+Edge Case - Rapid Flag Toggle,Verify system handles rapid flag value changes without errors,None. System supports runtime flag configuration.,1. Create script or process to rapidly toggle locationValidationRequired between true and false,TD-005: Rapid toggle script,Toggle script prepared,"Edge,Negative",Stability,,,,,No,,,,"REQ-007,TS-020"
+,,,2. Execute rapid toggle (e.g. 10 toggles in 1 second),,Toggles execute without system errors,,,,,,,,,,,
+,,,3. Navigate to adjustment workflow immediately after toggle,,Workflow loads successfully,,,,,,,,,,,
+,,,4. Verify latest flag value is respected and correct title is displayed,,Latest flag value (true or false) is correctly applied; appropriate title is displayed,,,,,,,,,,,

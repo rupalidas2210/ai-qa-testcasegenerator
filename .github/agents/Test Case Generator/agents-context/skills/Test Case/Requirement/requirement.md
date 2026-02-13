@@ -1,33 +1,26 @@
-# Requirement: Unable to Unassign Location & Reserve Label Updates
 
-## Description
-**Requirement changes post Demo**
+# Description
 
-### Updated UI Message
-**Unable to Unassign Location**
+## Behavior Update
+Update the UI to change the title on the adjustment screen based on the value of the `locationValidationRequired` flag.
 
-> This item is currently in a pick shift. You will be able to unassign this location once picking is complete.
+### If `locationValidationRequired` is **true**
+- Show: **Scan location** (title/label)
+- User must scan location, then proceed to adjustment screen (**Input adjustment and move items**)
 
----
+### If `locationValidationRequired` is **false**
+- Show: **Input adjustment and move items** (title/label)
+- Directly show adjustment screen, skipping location scan
+
+## Current Behavior (Before)
+The screen displays the label: **Scan location**
+
+## Expected Behavior (After)
+The screen displays: **Input adjustment and move items** when the flag is false.
 
 ## Acceptance Criteria
-
-### 1. Unassign Location Message
-- The Unassign Location message must match the Figma message exactly.
-- Message text:
-```
-Unable to Unassign Location
-This item is currently in a pick shift. You will be able to unassign this location once picking is complete.
-```
-
-### 2. Reserve Labels
-- Reserve labels must not include any item information.
-  - Labels should display only:
-    - Item
-    - Barcode
-
-- Barcode requirements:
-  - Barcode must be scannable.
-  - Barcode must match the location code on the label, but without the "-" character.
-
----
+- The adjustment screen title changes correctly according to the flag.
+- The user experience matches the described flow for each flag value.
+- Ensure consistent wording:
+  - "Scan location" when true
+  - "Input adjustment and move items" when false
