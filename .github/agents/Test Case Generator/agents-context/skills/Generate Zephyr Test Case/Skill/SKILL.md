@@ -7,15 +7,12 @@ Description : A skill that converts a Test Plan into Zephyr-ready CSV test cases
 A skill that converts a Test Plan into Zephyr-ready CSV test cases with complete coverage of all test types.
 This skill reads an existing Test Plan and generates structured test cases in CSV format ready for import into Zephyr.
 
----
-
-Before generating ANY CSV file, you MUST:
+Before generating ANY CSV file, you SHOULD:
 
 1. **READ the template file:**
    ```
    Path:.github\agents\Test Case Generator\agents-context\skills\Test Case\Template\ZephyrTestCaseTemplate.csv
    ```
-
 2. **EXTRACT the exact column headers** from line 1 of the template
 
 3. **USE ONLY those 16 columns** - Do NOT add, remove, or modify ANY columns
@@ -158,7 +155,7 @@ Generate test cases for **ALL** of the following types:
 **⚠️ CRITICAL: ABSOLUTE TEMPLATE COMPLIANCE REQUIRED - NO EXCEPTIONS ⚠️**
 
 **🔴 STEP 1 - READ TEMPLATE FILE FIRST (MANDATORY):**
-Before generating ANY CSV content, you MUST:
+Before generating ANY CSV content, you SHOULD:
 1. **Read the template file:** `.github\agents\Test Case Generator\agents-context\skills\Test Case\Template\ZephyrTestCaseTemplate.csv`
 2. **Extract the exact header row** from line 1 of the template
 3. **Use ONLY those column headers** - do not add, remove, or modify ANY columns
