@@ -1,0 +1,120 @@
+Name,Objective,Pre-condition,Test Step,Test Data,Test Result,Labels,Components,QA Engineer,Fix versions,Affect versions,Automated,API,Jira,Sub Domain,Requirement ID
+TC-001: Verify title displays Scan location when flag is true,Validate that the screen displays correct title when locationValidationRequired flag is set to true,locationValidationRequired flag is configured and accessible in test environment,Step 1: Set locationValidationRequired flag to true,locationValidationRequired = true,Screen displays title: Scan location,"Functional,Smoke",UI - Adjustment Screen,,,,,No,,,"REQ-001,TS-001"
+,,,Step 2: Navigate to adjustment feature,,,,,,,,,,,,
+,,,Step 3: Observe the screen title displayed,,,,,,,,,,,,
+,,,Step 4: Verify title text matches exactly,Expected: Scan location,Title displays Scan location (exact match),,,,,,,,,,
+TC-002: Verify title displays Input adjustment and move items when flag is false,Validate that the screen displays correct title when locationValidationRequired flag is set to false,locationValidationRequired flag is configured and accessible in test environment,Step 1: Set locationValidationRequired flag to false,locationValidationRequired = false,Screen displays title: Input adjustment and move items,"Functional,Smoke",UI - Adjustment Screen,,,,,No,,,"REQ-001,TS-002"
+,,,Step 2: Navigate to adjustment feature,,,,,,,,,,,,
+,,,Step 3: Observe the screen title displayed,,,,,,,,,,,,
+,,,Step 4: Verify title text matches exactly,Expected: Input adjustment and move items,Title displays Input adjustment and move items (exact match),,,,,,,,,,
+TC-003: Verify exact wording and capitalization for true state,Validate that title wording matches specification exactly with no variations for true state,locationValidationRequired flag set to true,Step 1: Set flag to true and navigate to adjustment screen,locationValidationRequired = true,Title capitalization verified: Scan location,"Functional,Regression",UI - Adjustment Screen,,,,,No,,,"REQ-004,TS-003"
+,,,Step 2: Verify exact text: Scan location,Expected: Scan location (capital S capital l),Title matches exactly with correct capitalization,,,,,,,,,,
+,,,Step 3: Verify no typos or spelling errors,,,,,,,,,,,,
+,,,Step 4: Verify no extra spaces or special characters,,,,,,,,,,,,
+TC-004: Verify exact wording and capitalization for false state,Validate that title wording matches specification exactly with no variations for false state,locationValidationRequired flag set to false,Step 1: Set flag to false and navigate to adjustment screen,locationValidationRequired = false,Title capitalization verified: Input adjustment and move items,"Functional,Regression",UI - Adjustment Screen,,,,,No,,,"REQ-004,TS-004"
+,,,Step 2: Verify exact text: Input adjustment and move items,Expected: Input adjustment and move items,Title matches exactly with correct capitalization and wording,,,,,,,,,,
+,,,Step 3: Verify no typos or spelling errors,,,,,,,,,,,,
+,,,Step 4: Verify no abbreviations or variations used,,,,,,,,,,,,
+TC-005: Verify complete navigation flow when flag is true,Validate end-to-end user navigation from scan location to adjustment screen when flag is true,locationValidationRequired flag set to true and user has adjustment permissions,Step 1: Set flag to true,locationValidationRequired = true,User successfully navigates: Scan location screen > Adjustment screen,"Functional,E2E",UI - Adjustment Flow,,,,,No,,,"REQ-002,TS-005"
+,,,Step 2: Open adjustment feature from main menu,,,,,,,,,,,,
+,,,Step 3: Verify Scan location screen appears first,,,,,,,,,,,,
+,,,Step 4: Complete location scanning action,Valid location barcode,Location scan successful,,,,,,,,,,
+,,,Step 5: Verify navigation to adjustment screen,,,,,,,,,,,,
+,,,Step 6: Verify adjustment screen displays Input adjustment and move items title,Expected title: Input adjustment and move items,Adjustment screen displays with correct title,,,,,,,,,,
+TC-006: Verify back navigation from adjustment screen when flag is true,Validate that back navigation returns user to scan location screen when flag is true,Flag set to true and user has completed location scan and is on adjustment screen,Step 1: Navigate to adjustment screen via location scan flow,locationValidationRequired = true,Back navigation returns to Scan location screen,"Functional,E2E",UI - Navigation,,,,,No,,,"REQ-005,TS-006"
+,,,Step 2: Click or tap the back button,,,,,,,,,,,,
+,,,Step 3: Verify user returns to Scan location screen,Expected: Scan location screen,User navigates back to Scan location screen successfully,,,,,,,,,,
+TC-007: Verify direct navigation to adjustment screen when flag is false,Validate that adjustment screen appears directly without location scan when flag is false,locationValidationRequired flag set to false,Step 1: Set flag to false,locationValidationRequired = false,Adjustment screen appears directly with no location scan,"Functional,Smoke,E2E",UI - Adjustment Flow,,,,,No,,,"REQ-003,TS-007"
+,,,Step 2: Open adjustment feature from main menu,,,,,,,,,,,,
+,,,Step 3: Verify no Scan location screen appears,Expected: Skip location scan entirely,Location scan screen is bypassed,,,,,,,,,,
+,,,Step 4: Verify adjustment screen displays directly,Expected title: Input adjustment and move items,Adjustment screen displays immediately with correct title,,,,,,,,,,
+TC-008: Verify location scan screen is skipped when flag is false,Validate that location scanning workflow is completely bypassed when flag is false,locationValidationRequired flag set to false and application ready to test,Step 1: Set flag to false,locationValidationRequired = false,Location scan screen does not appear in navigation flow,"Functional,Regression",UI - Adjustment Flow,,,,,No,,,"REQ-003,TS-008"
+,,,Step 2: Navigate to adjustment feature,,,,,,,,,,,,
+,,,Step 3: Verify workflow proceeds directly to adjustment screen,Expected: No scan screen shown,User goes straight to adjustment screen,,,,,,,,,,
+,,,Step 4: Verify no scan location option is visible or accessible,,,,,,,,,,,,
+TC-009: Verify behavior when flag value is null,Validate system handles null flag value gracefully with appropriate default behavior,Flag configuration set to null,Step 1: Set locationValidationRequired to null,locationValidationRequired = null,System displays default behavior or error message,Negative,Flag Configuration,,,,,No,,,"REQ-001,TS-009"
+,,,Step 2: Attempt to navigate to adjustment feature,,,,,,,,,,,,
+,,,Step 3: Observe system behavior,Expected: No crash or freeze,"System handles gracefully (defaults to false or shows error message, no crash)",,,,,,,,,,
+,,,Step 4: Verify appropriate error logging if applicable,Check system logs,Error logged appropriately,,,,,,,,,,
+TC-010: Verify behavior when flag value is undefined,Validate system handles undefined flag value gracefully with appropriate default behavior,Flag configuration is undefined or not set,Step 1: Remove or unset locationValidationRequired flag,locationValidationRequired = undefined,System displays default behavior or error message,Negative,Flag Configuration,,,,,No,,,"REQ-001,TS-010"
+,,,Step 2: Attempt to navigate to adjustment feature,,,,,,,,,,,,
+,,,Step 3: Observe system behavior,Expected: No crash,"System handles gracefully (defaults to false or shows error, no crash)",,,,,,,,,,
+,,,Step 4: Verify system logs appropriate warning or error,Check system logs,Warning/error logged appropriately,,,,,,,,,,
+TC-011: Verify behavior with invalid flag data type - string,Validate system rejects invalid string data type for flag and handles error appropriately,Flag is configured with test access,Step 1: Set locationValidationRequired to string value,locationValidationRequired = yes (string),System validates data type and displays error or default behavior,Negative,Flag Configuration,,,,,No,,,"REQ-001,TS-011"
+,,,Step 2: Attempt to navigate to adjustment feature,,,,,,,,,,,,
+,,,Step 3: Verify system rejects invalid type,Expected: Type validation,"System detects invalid type, displays error or defaults to safe behavior",,,,,,,,,,
+,,,Step 4: Verify no unexpected UI behavior occurs,Expected: Controlled error handling,System handles error gracefully without UI corruption,,,,,,,,,,
+TC-012: Verify behavior with empty string flag value,Validate system rejects empty string as flag value and handles error appropriately,Flag is configured with test access,Step 1: Set locationValidationRequired to empty string,locationValidationRequired = (empty string),System validates and rejects empty string with error or default behavior,Negative,Flag Configuration,,,,,No,,,"REQ-001,TS-012"
+,,,Step 2: Attempt to navigate to adjustment feature,,,,,,,,,,,,
+,,,Step 3: Verify system validates and rejects empty value,Expected: Validation error,"System detects empty value, displays error or defaults to safe behavior",,,,,,,,,,
+,,,Step 4: Check for appropriate error messaging,Expected: User-friendly error,Error message displayed appropriately to user or logged,,,,,,,,,,
+TC-013: Verify UI updates when flag changes from true to false during session,Validate that UI dynamically updates when flag value changes from true to false mid-session,Initial flag set to true and user in active session,Step 1: Start with flag set to true,locationValidationRequired = true,UI initially displays Scan location,"Edge,Regression",Flag Configuration,,,,,No,,,"REQ-001,TS-013"
+,,,Step 2: User navigates to adjustment feature,,"Scan location screen displays, user completes scan",,,,,,,,,,
+,,,Step 3: Change flag to false mid-session,locationValidationRequired = false changed during session,,,,,,,,,,,
+,,,Step 4: Navigate back to adjustment feature,,,,,,,,,,,,
+,,,Step 5: Verify UI now shows direct adjustment access,Expected: No scan screen,UI updates to skip location scan and show adjustment screen directly,,,,,,,,,,
+TC-014: Verify UI updates when flag changes from false to true during session,Validate that UI dynamically updates when flag value changes from false to true mid-session,Initial flag set to false and user in active session,Step 1: Start with flag set to false,locationValidationRequired = false,UI initially shows direct adjustment screen access,"Edge,Regression",Flag Configuration,,,,,No,,,"REQ-001,TS-014"
+,,,Step 2: User accesses adjustment feature directly,Expected: Direct access,Adjustment screen appears directly without scan,,,,,,,,,,
+,,,Step 3: Change flag to true mid-session,locationValidationRequired = true changed during session,,,,,,,,,,,
+,,,Step 4: Navigate back to adjustment feature from main menu,,,,,,,,,,,,
+,,,Step 5: Verify UI now requires location scan,Expected: Scan location screen appears,UI updates to show Scan location screen before adjustment access,,,,,,,,,,
+TC-015: Verify UI state consistency after multiple flag toggles,Validate that UI always reflects current flag state correctly after multiple flag value changes,Flag is configurable and user can navigate multiple times,Step 1: Set initial flag to true,locationValidationRequired = true,UI displays Scan location,"Edge,Regression",Flag Configuration,,,,,No,,,"REQ-001,TS-015"
+,,,Step 2: Navigate to adjustment feature,Verify scan screen appears,Scan location screen displayed,,,,,,,,,,
+,,,Step 3: Toggle flag to false,locationValidationRequired = false,,,,,,,,,,,
+,,,Step 4: Navigate to adjustment feature again,Verify no scan screen,Adjustment screen displayed directly,,,,,,,,,,
+,,,Step 5: Toggle flag back to true,locationValidationRequired = true,,,,,,,,,,,
+,,,Step 6: Navigate to adjustment feature again,Verify scan screen reappears,Scan location screen displayed again,,,,,,,,,,
+,,,Step 7: Toggle flag to false again,locationValidationRequired = false,,,,,,,,,,,
+,,,Step 8: Navigate to adjustment feature final time,Verify no scan screen again,Adjustment screen displayed directly (UI consistently reflects current flag state),,,,,,,,,,
+TC-016: Verify successful flag retrieval from configuration service,Validate that application correctly reads and applies flag value from configuration service,Flag configuration service is available and running,Step 1: Ensure flag service is running and accessible,Service endpoint available,Service responds successfully,Integration,Flag Service Integration,,,,,No,,,"REQ-001,TS-016"
+,,,Step 2: Set flag value in configuration service,locationValidationRequired = true in service,Flag value configured in service,,,,,,,,,,
+,,,Step 3: Launch application or navigate to adjustment feature,,,,,,,,,,,,
+,,,Step 4: Verify application retrieves flag value from service,Check network logs,API call made to flag service successfully,,,,,,,,,,
+,,,Step 5: Verify UI correctly applies retrieved flag value,Expected: Scan location screen,UI displays Scan location screen (flag value applied correctly),,,,,,,,,,
+TC-017: Verify graceful handling when flag service is unavailable,Validate that application handles flag service downtime gracefully with default behavior,Flag configuration service is intentionally stopped or unreachable,Step 1: Stop or disconnect flag configuration service,Service unavailable (timeout or error),Service is not reachable,"Integration,Negative",Flag Service Integration,,,,,No,,,"REQ-001,TS-017"
+,,,Step 2: Launch application or navigate to adjustment feature,,,,,,,,,,,,
+,,,Step 3: Verify application detects service unavailability,Check network logs,API call fails (timeout or connection error),,,,,,,,,,
+,,,Step 4: Verify application uses default behavior,Expected: Error message or default to false,Application displays default screen or error message (no crash),,,,,,,,,,
+,,,Step 5: Verify error is logged appropriately,Check system logs,Error logged with service unavailable details,,,,,,,,,,
+TC-018: Verify behavior with delayed flag service response,Validate that application handles slow flag service response with loading state or timeout,Flag service configured to respond with artificial delay,Step 1: Configure flag service to delay response,API latency set to 3-5 seconds,Service will respond slowly,"Integration,Edge",Flag Service Integration,,,,,No,,,"REQ-001,TS-018"
+,,,Step 2: Navigate to adjustment feature,,,,,,,,,,,,
+,,,Step 3: Observe UI behavior during delay,Expected: Loading indicator or default,UI shows loading state or displays default screen while waiting,,,,,,,,,,
+,,,Step 4: Wait for delayed response to arrive,Delay completes,,,,,,,,,,,
+,,,Step 5: Verify UI updates after flag value is received,Expected: UI updates to match flag,UI updates correctly once flag value is retrieved (Scan location or adjustment screen),,,,,,,,,,
+TC-019: Verify error handling for malformed flag service response,Validate that application handles corrupted or invalid flag service response gracefully,Flag service returns invalid JSON or malformed data,Step 1: Configure flag service to return malformed response,Invalid JSON response,Service returns corrupted data,"Negative,Integration",Flag Service Integration,,,,,No,,,"REQ-001,TS-019"
+,,,Step 2: Navigate to adjustment feature,,,,,,,,,,,,
+,,,Step 3: Verify application detects malformed response,Check error handling,Application detects invalid data format,,,,,,,,,,
+,,,Step 4: Verify application uses default behavior,Expected: Default screen or error,Application displays default behavior (no crash),,,,,,,,,,
+,,,Step 5: Verify error is logged with details,Check system logs,Error logged with details about malformed response,,,,,,,,,,
+TC-020: Verify recovery after flag service restoration,Validate that application successfully retrieves flag after service is restored following outage,Flag service was down and is then restored,Step 1: Start with flag service unavailable,Service initially down,Application uses default behavior,"Negative,Integration",Flag Service Integration,,,,,No,,,"REQ-001,TS-020"
+,,,Step 2: User experiences default behavior due to service outage,Expected: Default screen,Application displays default screen,,,,,,,,,,
+,,,Step 3: Restore flag service to operational state,Service comes back online,Service is now available and responding,,,,,,,,,,
+,,,Step 4: Navigate away and return to adjustment feature,,,,,,,,,,,,
+,,,Step 5: Verify application successfully retrieves flag value,Check network logs,API call to flag service succeeds,,,,,,,,,,
+,,,Step 6: Verify UI updates to reflect actual flag value,Expected: Correct flag-driven behavior,UI displays correct screen based on flag value (recovery successful),,,,,,,,,,
+TC-021: Verify title capitalization and formatting for both flag states,Validate that titles display with correct capitalization as specified in requirements,Flag can be set to both true and false,Step 1: Set flag to true,locationValidationRequired = true,Title displays correctly: Scan location,Functional,UI - Display,,,,,No,,,"REQ-004,TS-021"
+,,,Step 2: Navigate to adjustment feature and observe title,Expected: Scan location with capital S and L,Title capitalization is correct,,,,,,,,,,
+,,,Step 3: Set flag to false,locationValidationRequired = false,,,,,,,,,,,
+,,,Step 4: Navigate to adjustment feature and observe title,Expected: Input adjustment and move items,Title capitalization is correct,,,,,,,,,,
+,,,Step 5: Verify formatting (font style alignment spacing),Expected: Professional formatting,Both titles display with proper formatting and styling,,,,,,,,,,
+TC-022: Verify title visibility and readability across different screen sizes,Validate that titles are clearly visible and readable on all device screen sizes,Application accessible on different devices or browser sizes,Step 1: Set flag to true,locationValidationRequired = true,Title is visible and readable on all screen sizes,Functional,UI - Display,,,,,No,,,"REQ-004,TS-022"
+,,,Step 2: Open adjustment feature on desktop/large screen,Screen resolution: 1920x1080,Title Scan location is clearly visible and readable,,,,,,,,,,
+,,,Step 3: Open adjustment feature on tablet/medium screen,Screen resolution: 768x1024,Title remains visible and readable,,,,,,,,,,
+,,,Step 4: Open adjustment feature on mobile/small screen,Screen resolution: 375x667,Title remains visible and readable,,,,,,,,,,
+,,,Step 5: Set flag to false and repeat steps 2-4,locationValidationRequired = false,Title Input adjustment and move items is clearly visible on all screen sizes,,,,,,,,,,
+TC-023: Verify no typos or spelling errors in titles for both states,Validate that titles match specification exactly with no typos or spelling errors,Flag can be set to both true and false,Step 1: Set flag to true,locationValidationRequired = true,Title matches specification perfectly: Scan location,Functional,UI - Display,,,,,No,,,"REQ-004,TS-023"
+,,,Step 2: Navigate to adjustment feature,,,,,,,,,,,,
+,,,Step 3: Verify exact spelling of Scan location,Expected: S-c-a-n space l-o-c-a-t-i-o-n,No typos - exact match to specification,,,,,,,,,,
+,,,Step 4: Set flag to false,locationValidationRequired = false,,,,,,,,,,,
+,,,Step 5: Navigate to adjustment feature,,,,,,,,,,,,
+,,,Step 6: Verify exact spelling of Input adjustment and move items,Expected: Input adjustment and move items,No typos - exact match to specification,,,,,,,,,,
+TC-024: Verify previous behavior is completely replaced when flag is false,Validate that old behavior no longer appears and new behavior is correctly implemented,locationValidationRequired flag set to false,Step 1: Set flag to false,locationValidationRequired = false,Old scan location behavior does not appear,Regression,UI - Adjustment Flow,,,,,No,,,"REQ-003,TS-024"
+,,,Step 2: Navigate to adjustment feature,,,,,,,,,,,,
+,,,Step 3: Verify no remnants of old scan location screen appear,Expected: No scan screen shown,Scan location screen completely bypassed (old behavior replaced),,,,,,,,,,
+,,,Step 4: Verify adjustment screen displays immediately with correct title,Expected: Input adjustment and move items,New behavior correctly implemented,,,,,,,,,,
+TC-025: Verify adjustment screen functionality remains unchanged regardless of flag,Validate that core adjustment screen functionality works correctly independent of flag value,User has access to adjustment screen in both flag states,Step 1: Set flag to true and navigate to adjustment screen,locationValidationRequired = true (via scan flow),Adjustment screen functionality works correctly,Regression,Adjustment Screen Functionality,,,,,No,,,"REQ-005,TS-025"
+,,,Step 2: Perform standard adjustment operations,Test data: sample inventory items,Adjustments are processed successfully,,,,,,,,,,
+,,,Step 3: Verify all adjustment features work as expected,Expected: All features functional,All adjustment screen features work correctly,,,,,,,,,,
+,,,Step 4: Set flag to false and access adjustment screen directly,locationValidationRequired = false (direct access),,,,,,,,,,,
+,,,Step 5: Perform same adjustment operations,Test data: sample inventory items,Adjustments are processed successfully,,,,,,,,,,
+,,,Step 6: Verify functionality is identical regardless of flag,Expected: Consistent functionality,Adjustment screen works the same way in both scenarios (functionality remains unchanged),,,,,,,,,,

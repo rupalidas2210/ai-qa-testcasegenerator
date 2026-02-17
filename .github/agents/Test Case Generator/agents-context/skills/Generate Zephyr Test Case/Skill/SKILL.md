@@ -34,19 +34,31 @@ Before generating ANY CSV file, you SHOULD:
 
 **Solution:** Wrap comma-containing values in double quotes
 
+**🚨 UNIVERSAL CSV QUOTING RULE - APPLIES TO ALL COLUMNS:**
+**ANY column containing commas MUST be wrapped in double quotes**
+**This rule applies SIMULTANEOUSLY to ALL comma-containing columns in the SAME row**
+
 **Critical Columns That MUST Have Quotes:**
 1. **Labels (Column 7)**: `"Functional,Regression,E2E"` 
 2. **Requirement ID (Column 16)**: **`"REQ-001,TS-001"`** ← Most critical!
 
-**⚠️ Why Requirement ID Always Creates 17 Columns Without Quotes:**
+**⚠️ BOTH Rules Work Together - Example CSV Row:**
+```csv
+"TC-001: Test Name","Objective","Pre-condition","Step 1","Data","Result","Functional,Regression,E2E","Component",,,,,No,,,"REQ-001,TS-001"
+                                                                        ↑ Column 7 QUOTED            ↑ Column 16 QUOTED
+```
+**Key Point:** Both Labels AND Requirement ID are quoted in the SAME row - not one OR the other!
+
+**⚠️ Why Columns Create 17+ Without Quotes:**
 - Writing `REQ-001,TS-001` without quotes: CSV sees comma as delimiter
 - Result: REQ-001 in column 16, TS-001 in column 17 ❌
-- Fix: **Always write `"REQ-001,TS-001"` with quotes** ✅
+- Writing `Functional,Regression` without quotes: Creates 3 columns instead of 1 ❌
+- Fix: **Always quote BOTH: `"Functional,Regression"` AND `"REQ-001,TS-001"`** ✅
 
 **Validation Check:**
 - Count columns in every row = Must be exactly 16
-- **If you see 17 columns, check Requirement ID column for missing quotes**
-- The comma in `REQ-XXX,TS-YYY` MUST be wrapped in quotes
+- **If you see 17+ columns, check ALL columns for missing quotes**
+- Every comma-separated value MUST be inside quotes (applies to multiple columns per row)
 
 ---
 
@@ -70,27 +82,30 @@ MANDATORY FIRST ACTION:
 4. Validate: Confirm you have exactly 16 columns before proceeding
 ```
 
-**🚨 CRITICAL CSV FORMATTING RULE - PREVENTS 17 COLUMN ERROR:**
+**🚨 CRITICAL CSV FORMATTING RULE - PREVENTS 17+ COLUMN ERROR:**
 
 **When a cell contains commas, wrap it in double quotes:**
-- Labels: `"Functional,Regression,E2E"`
-- Requirement ID: **`"REQ-001,TS-001"`** ← THIS IS THE MOST COMMON MISTAKE!
+- Labels (Column 7): `"Functional,Regression,E2E"`
+- Requirement ID (Column 16): **`"REQ-001,TS-001"`** ← THIS IS THE MOST COMMON MISTAKE!
+
+**⚠️ BOTH columns can have commas in the SAME row - BOTH must be quoted simultaneously!**
 
 **Why?** Without quotes, CSV treats commas as column separators.
 
-**Example - Requirement ID Column:**
+**Example - Complete Row with BOTH columns quoted:**
 ```csv
-❌ WRONG (17 columns): ...,REQ-001,TS-001
-                            ↑col16  ↑col17 (split by comma)
+❌ WRONG (19+ columns): ...,"Test data","Result",Functional,Regression,E2E,"Component",,,,,No,,,REQ-001,TS-001
+                                                  ↑col7     ↑col8      ↑col9           ↑col16  ↑col17 (BROKEN)
 
-✅ CORRECT (16 columns): ...,"REQ-001,TS-001"
-                             ↑col16 (one value)
+✅ CORRECT (16 columns): ...,"Test data","Result","Functional,Regression,E2E","Component",,,,,No,,,"REQ-001,TS-001"
+                                                   ↑ Column 7 (one cell)                    ↑ Column 16 (one cell)
 ```
 
 **When generating CSV rows:**
-- Always write: `"REQ-001,TS-001"` with quotes
-- Never write: `REQ-001,TS-001` without quotes
-- The comma MUST be inside the quotes to stay in one column
+- Always quote ALL comma-containing values: `"Functional,Regression,E2E"` AND `"REQ-001,TS-001"`
+- Never write comma values without quotes: `Functional,Regression,E2E` or `REQ-001,TS-001`
+- Multiple columns in the SAME row can be quoted - this is not only allowed, it's REQUIRED!
+- The commas MUST be inside the quotes to stay in one column
 
 #### 2.1 Test Case Types - MANDATORY Coverage
 Generate test cases for **ALL** of the following types:
@@ -223,7 +238,7 @@ After reading the template, verify you have exactly **16 columns** in this exact
   Step 3: [description]
   ```
 
-#### 2.4 Labels Column - Test Type Identification
+#### 2.4 Labels Column - Test Type Identification (Column 7)
 
 **Labels to use:**
 - Functional, Regression, Smoke, E2E, Integration, Negative, Edge
@@ -233,13 +248,19 @@ After reading the template, verify you have exactly **16 columns** in this exact
 - **MUST wrap in double quotes** to prevent comma from splitting into extra columns
 - No spaces after commas
 
+**⚠️ IMPORTANT: This rule works SIMULTANEOUSLY with Requirement ID quoting**
+- When a row has BOTH multi-value Labels AND Requirement ID, BOTH must be quoted
+- Example row: `...,"Functional,E2E",Component,,,,,No,,,"REQ-001,TS-001"`
+  - Column 7 (Labels): `"Functional,E2E"` ← Quoted
+  - Column 16 (Requirement ID): `"REQ-001,TS-001"` ← Also quoted
+
 **Examples:**
 ```csv
 ✅ CORRECT: "Functional,Regression,E2E"
 ❌ WRONG: Functional,Regression,E2E  (creates 3 columns instead of 1)
 ```
 
-#### 2.5 Requirement ID Column - Requirements & Test Scenario Traceability
+#### 2.5 Requirement ID Column - Requirements & Test Scenario Traceability (Column 16)
 
 **🔴 CRITICAL FORMATTING RULE - READ CAREFULLY:**
 
@@ -257,7 +278,17 @@ When you write `"REQ-001,TS-001"` with quotes:
 - CSV parser sees: column 16 = `REQ-001,TS-001` (one value) ✅
 - Result: 16 columns total (correct)
 
-**❌ WRONG - Creates 17 columns:**
+**⚠️ SIMULTANEOUS WITH LABELS QUOTING:**
+**Both Column 7 (Labels) AND Column 16 (Requirement ID) must be quoted in the SAME row when both contain commas**
+
+**Complete Row Example:**
+```csv
+"TC-001","Objective","Pre-condition","Step 1","Data","Result","Functional,Regression,E2E","Component",,,,,No,,,"REQ-001,TS-001"
+                                                               ↑ Col 7 quoted              ↑ Col 16 quoted
+```
+**Both columns have quotes because both contain commas - this is correct and required!**
+
+**❌ WRONG - Creates 17+ columns:**
 ```csv
 ...,,,,,REQ-001,TS-001
        ↑col 16 ↑col 17 (BROKEN - two columns created)
@@ -278,14 +309,16 @@ When you write `"REQ-001,TS-001"` with quotes:
 **If RTM shows multiple scenarios:**
 - RTM: `REQ-001` with scenarios `TS-001, TS-002`
 - Create 2 separate test case rows:
-  - Row 1: **`"REQ-001,TS-001"`** (quoted)
-  - Row 2: **`"REQ-001,TS-002"`** (quoted)
+  - Row 1: **`"REQ-001,TS-001"`** (quoted) with **`"Functional,Smoke"`** (also quoted if multiple labels)
+  - Row 2: **`"REQ-001,TS-002"`** (quoted) with **`"Functional,Regression"`** (also quoted if multiple labels)
 
 **⚠️ CRITICAL VALIDATION:**
 - Every CSV row must have exactly 16 columns
-- **If you see 17 columns, you forgot quotes around `"REQ-XXX,TS-YYY"`**
+- **If you see 17+ columns, you forgot quotes around comma-containing values**
 - The comma between REQ and TS MUST be inside quotes to prevent column splitting
+- The commas in Labels MUST also be inside quotes
 - When writing CSV: Always use `"REQ-001,TS-001"` NOT `REQ-001,TS-001`
+- **Quote ALL comma-containing columns in the same row - not just one!**
 
 #### 2.6 Sub Domain Column - Leave Blank
 **MANDATORY Rule:**
@@ -298,34 +331,57 @@ When you write `"REQ-001,TS-001"` with quotes:
 
 ### 2.7 CSV ROW FORMAT EXAMPLES
 
-**🔴 CRITICAL: All examples show `"REQ-XXX,TS-YYY"` in QUOTES - this is mandatory!**
+**🔴 CRITICAL: BOTH Labels AND Requirement ID use quotes when containing commas!**
 
-**Single-Step Test Case (16 columns):**
+**Single-Step Test Case with BOTH columns quoted (16 columns):**
 ```csv
 "TC-001: Test Name","Test objective","Pre-conditions","Step 1: Action","Test data","Expected result","Functional,Smoke","Component",,,,,No,,,,"REQ-001,TS-001"
+                                                                                                      ↑ Col 7 QUOTED          ↑ Col 16 QUOTED
 ```
-**Column breakdown:** 1=Name, 2=Objective, 3=Pre-condition, 4=Test Step, 5=Test Data, 6=Test Result, 7=Labels(quoted), 8=Components, 9-15=empty, 16=**RequirementID(quoted)**
+**Column breakdown:** 1=Name, 2=Objective, 3=Pre-condition, 4=Test Step, 5=Test Data, 6=Test Result, 7=**Labels(QUOTED)**, 8=Components, 9-15=empty, 16=**RequirementID(QUOTED)**
 
-**❌ WRONG - Without quotes (creates 17 columns):**
+**⚠️ KEY INSIGHT: Notice Column 7 AND Column 16 are BOTH quoted in the SAME row - this is correct!**
+
+**❌ WRONG - Labels without quotes (creates 18+ columns):**
 ```csv
-"TC-001: Test","Objective",...,No,,,REQ-001,TS-001
-                                   ↑col16 ↑col17 (BROKEN)
+"TC-001: Test",... ,Functional,Smoke,"Component",,,,,No,,,,"REQ-001,TS-001"
+                    ↑col7 ↑col8 ↑col9 (BROKEN - Labels split into multiple columns)
 ```
 
-**Multi-Step Test Case (Main row + continuation rows):**
+**❌ WRONG - Requirement ID without quotes (creates 17 columns):**
 ```csv
-"TC-002: Multi-Step","Objective","Pre-conditions","Step 1: First action","Data 1","Result 1","Functional","Component",,,,,No,,,,"REQ-002,TS-005"
+"TC-001: Test","Objective",...,"Functional,Smoke","Component",,,,,No,,,REQ-001,TS-001
+                                                                       ↑col16 ↑col17 (BROKEN)
+```
+
+**❌ WRONG - BOTH without quotes (creates 19+ columns - disaster!):**
+```csv
+"TC-001: Test",...,Functional,Smoke,"Component",,,,,No,,,REQ-001,TS-001
+                   ↑ Labels split ↑           ↑ Requirement ID split ↑ (BROKEN EVERYWHERE)
+```
+
+**✅ CORRECT - BOTH quoted (exactly 16 columns):**
+```csv
+"TC-001: Test Name","Objective","Pre-cond","Step 1","Data","Result","Functional,Smoke,E2E","Component",,,,,No,,,,"REQ-001,TS-001"
+                                                                      ↑ 3 labels in 1 cell   ↑ 2 IDs in 1 cell
+```
+
+**Multi-Step Test Case with BOTH Labels AND Requirement ID quoted:**
+```csv
+"TC-002: Multi-Step","Objective","Pre-conditions","Step 1: First action","Data 1","Result 1","Functional,Regression","Component",,,,,No,,,,"REQ-002,TS-005"
 ,,,"Step 2: Second action","Data 2","Result 2",,,,,,,,,,
 ,,,"Step 3: Third action","Data 3","Result 3",,,,,,,,,,
 ```
-*Note: `"REQ-002,TS-005"` with quotes in column 16 of row 1; Continuation rows have 13 empty + 3 filled*
+*Note: Row 1 has BOTH `"Functional,Regression"` (col 7) AND `"REQ-002,TS-005"` (col 16) quoted; Continuation rows have 13 empty + 3 filled*
 
-**Multiple Test Scenarios from Same Requirement:**
+**Multiple Test Scenarios from Same Requirement (with multiple labels):**
 ```csv
-"TC-010: Scenario A","Objective A","Pre-cond A","Step 1","Data A","Result A","Functional",,,,,No,,,,"REQ-004,TS-010"
-"TC-011: Scenario B","Objective B","Pre-cond B","Step 1","Data B","Result B","Negative",,,,,No,,,,"REQ-004,TS-011"
+"TC-010: Scenario A","Objective A","Pre-cond A","Step 1","Data A","Result A","Functional,Smoke",,,,,No,,,,"REQ-004,TS-010"
+"TC-011: Scenario B","Objective B","Pre-cond B","Step 1","Data B","Result B","Negative,Edge",,,,,No,,,,"REQ-004,TS-011"
 ```
-*Note: Each row has `"REQ-004,TS-XXX"` quoted in column 16; Same REQ, different TS = separate rows*
+*Note: Each row has BOTH Labels AND Requirement ID quoted when containing commas; Same REQ, different TS = separate rows*
+
+**🔴 REMEMBER: It's not "Label OR Requirement ID" - it's "Label AND Requirement ID" - BOTH get quoted when they contain commas!**
 
 ---
 
