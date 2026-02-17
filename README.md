@@ -40,17 +40,6 @@ The generator follows a **3-step sequential workflow**:
    - **Gap Report**: `.github/agents/Test Case Generator/agents-context/GapAnalysis/[ProjectName]_GapReport.md`
    - **Missing Tests CSV** (if gaps found): `.github/agents/Test Case Generator/agents-context/GapAnalysis/[ProjectName]_MissingTests.csv`
 
-### Validate CSV Format
-
-Validate a single CSV file:
-```powershell
-python ".github/agents/Test Case Generator/agents-context/scripts/validate_zephyr_csv.py" "path/to/file.csv"
-```
-
-Validate all CSV files:
-```powershell
-python ".github/agents/Test Case Generator/agents-context/scripts/validate_zephyr_csv.py" --validate-all
-```
 
 ## Zephyr Template Enforcement
 
@@ -75,7 +64,6 @@ All generated CSV files **must** match the `ZephyrTestCaseTemplate.csv` format w
 
 ⚠️ **No extra columns allowed** (Priority, Owner, Status, etc. are forbidden)
 
-For detailed documentation, see: [VALIDATION_GUIDE.md](.github/agents/Test%20Case%20Generator/agents-context/VALIDATION_GUIDE.md)
 
 ## Coverage Gap Analysis
 
