@@ -4,101 +4,122 @@ Description : A skill that converts a Test Plan into Zephyr-ready CSV test cases
 ---
 
 # Generate Zephyr Test Case
-A skill that converts a Test Plan into Zephyr-ready CSV test cases with complete coverage of all test types.
-This skill reads an existing Test Plan and generates structured test cases in CSV format ready for import into Zephyr.
 
-Before generating ANY CSV file, you SHOULD:
+A skill that converts a Test Plan into Zephyr-ready CSV test cases with complete coverage of all test types. This skill reads an existing Test Plan and generates structured test cases in CSV format ready for import into Zephyr.
+
+---
+
+## ⚠️ CRITICAL WARNING: MULTI-STEP TEST CASES
+
+**THE #1 ERROR THAT BREAKS CSV IMPORTS:**
+
+❌ **NEVER write all steps in one cell with newlines:**
+```
+"Step 1: action\nStep 2: action\nStep 3: action"
+```
+
+✅ **ALWAYS write each step on its own row:**
+```
+"Step 1: action"
+(next row) ,,,"Step 2: action",,,,,,,,,,,,
+(next row) ,,,"Step 3: action",,,,,,,,,,,,
+```
+
+**See detailed instructions in section "🚨 CRITICAL: MULTI-STEP TEST CASES" below.**
+
+---
+
+## Before generating ANY CSV file, you SHOULD:
 
 1. **READ the template file:**
    ```
-   Path:.github\agents\Test Case Generator\agents-context\skills\Test Case\Template\ZephyrTestCaseTemplate.csv
+   Path: .github\agents\Test Case Generator\agents-context\skills\Test Case\Template\ZephyrTestCaseTemplate.csv
    ```
+
 2. **EXTRACT the exact column headers** from line 1 of the template
 
 3. **USE ONLY those 16 columns** - Do NOT add, remove, or modify ANY columns
 
 4. **VALIDATE** your generated CSV matches the template exactly before saving
 
-**❌ FORBIDDEN COLUMNS (NOT in template):**
-- Priority, Status, Owner, Folder, Estimated Time, Test Script Type, Component (without 's'), Precondition (without hyphen), Expected Result
+### ❌ FORBIDDEN COLUMNS (NOT in template):
+- Priority, Status, Owner, Folder, Estimated Time, Test Script Type
+- Component (without 's'), Precondition (without hyphen), Expected Result
 
-**✅ REQUIRED COLUMNS (From template - exactly 16):**
-- Name, Objective, Pre-condition, Test Step, Test Data, Test Result, Labels, Components, QA Engineer, Fix versions, Affect versions, Automated, API, Jira, Sub Domain, Requirement ID
+### ✅ REQUIRED COLUMNS (From template - exactly 16):
+Name, Objective, Pre-condition, Test Step, Test Data, Test Result, Labels, Components, QA Engineer, Fix versions, Affect versions, Automated, API, Jira, Sub Domain, Requirement ID
 
 **Template validation is MANDATORY before saving any CSV file.**
 
 ---
+
 ## 🔴 QUICK REFERENCE: Avoiding Column Splitting Issues
 
 **Problem:** Commas in cell values create extra columns (16 becomes 17+)
 
 **Solution:** Wrap comma-containing values in double quotes
 
-**🚨 UNIVERSAL CSV QUOTING RULE - APPLIES TO ALL COLUMNS:**
-**ANY column containing commas MUST be wrapped in double quotes**
+### 🚨 UNIVERSAL CSV QUOTING RULE - APPLIES TO ALL COLUMNS:
+**ANY column containing commas MUST be wrapped in double quotes**  
 **This rule applies SIMULTANEOUSLY to ALL comma-containing columns in the SAME row**
 
-**Critical Columns That MUST Have Quotes:**
-1. **Labels (Column 7)**: `"Functional,Regression,E2E"` 
-2. **Requirement ID (Column 16)**: **`"REQ-001,TS-001"`** ← Most critical!
+### Critical Columns That MUST Have Quotes:
+1. **Labels (Column 7)**: `"Functional,Regression,E2E"`
+2. **Requirement ID (Column 16)**: `"REQ-001,TS-001"` ← Most critical!
 
-**⚠️ BOTH Rules Work Together - Example CSV Row:**
+### ⚠️ BOTH Rules Work Together - Example CSV Row:
 ```csv
 "TC-001: Test Name","Objective","Pre-condition","Step 1","Data","Result","Functional,Regression,E2E","Component",,,,,No,,,"REQ-001,TS-001"
                                                                         ↑ Column 7 QUOTED            ↑ Column 16 QUOTED
 ```
 **Key Point:** Both Labels AND Requirement ID are quoted in the SAME row - not one OR the other!
 
-**⚠️ Why Columns Create 17+ Without Quotes:**
+### ⚠️ Why Columns Create 17+ Without Quotes:
 - Writing `REQ-001,TS-001` without quotes: CSV sees comma as delimiter
 - Result: REQ-001 in column 16, TS-001 in column 17 ❌
 - Writing `Functional,Regression` without quotes: Creates 3 columns instead of 1 ❌
-- Fix: **Always quote BOTH: `"Functional,Regression"` AND `"REQ-001,TS-001"`** ✅
-
-**Validation Check:**
-- Count columns in every row = Must be exactly 16
-- **If you see 17+ columns, check ALL columns for missing quotes**
-- Every comma-separated value MUST be inside quotes (applies to multiple columns per row)
-
+- Fix: Always quote BOTH: `"Functional,Regression"` AND `"REQ-001,TS-001"` ✅
 ---
 
 ## Workflow: Test Plan → Zephyr Import Test Cases
 
 ### 1. Read the Test Plan File
-- Locate and read the Test Plan file from `.github\agents\Test Case Generator\agents-context\Test Case\TestPlan\`
+- Locate and read the Test Plan file from `.github\agents\Test Case Generator\agents-context\TestPlan\`
 - Parse all test scenarios, requirements traceability, and coverage requirements
 - Extract project name from the Test Plan
-- Understand all functional requirements, business rules, and acceptance criteria
-
-
+- Workflow: Test Plan → Zephyr Import Test Cases
+1. Read the Test Plan File
+Locate and read the Test Plan file from .github\agents\Test Case Generator\agents-context\Test Case\TestPlan\
 ### 2. Generate Zephyr Ready Import Test Cases
 
-**🔴 BEFORE STARTING: READ THE TEMPLATE FILE FIRST**
-```
-MANDATORY FIRST ACTION:
-1. Read: .github\agents\Test Case Generator\agents-context\skills\Test Case\Template\ZephyrTestCaseTemplate.csv
-2. Extract: The exact column headers from line 1
-3. Use: ONLY those 16 columns for your CSV generation
-4. Validate: Confirm you have exactly 16 columns before proceeding
-```
+#### 🔴 BEFORE STARTING: READ THE TEMPLATE FILE FIRST
 
-**🚨 CRITICAL CSV FORMATTING RULE - PREVENTS 17+ COLUMN ERROR:**
+**MANDATORY FIRST ACTION:**
+1. **Read:** `.github\agents\Test Case Generator\agents-context\skills\Test Case\Template\ZephyrTestCaseTemplate.csv`
+2. **Extract:** The exact column headers from line 1
+3. **Use:** ONLY those 16 columns for your CSV generation
+#### 🚨 CRITICAL CSV FORMATTING RULE - PREVENTS 17+ COLUMN ERROR:
 
 **When a cell contains commas, wrap it in double quotes:**
-- Labels (Column 7): `"Functional,Regression,E2E"`
-- Requirement ID (Column 16): **`"REQ-001,TS-001"`** ← THIS IS THE MOST COMMON MISTAKE!
+- **Labels (Column 7):** `"Functional,Regression,E2E"`
+- **Requirement ID (Column 16):** `"REQ-001,TS-001"` ← THIS IS THE MOST COMMON MISTAKE!
 
-**⚠️ BOTH columns can have commas in the SAME row - BOTH must be quoted simultaneously!**
+⚠️ **BOTH columns can have commas in the SAME row - BOTH must be quoted simultaneously!**
 
 **Why?** Without quotes, CSV treats commas as column separators.
 
 **Example - Complete Row with BOTH columns quoted:**
-```csv
-❌ WRONG (19+ columns): ...,"Test data","Result",Functional,Regression,E2E,"Component",,,,,No,,,REQ-001,TS-001
-                                                  ↑col7     ↑col8      ↑col9           ↑col16  ↑col17 (BROKEN)
 
-✅ CORRECT (16 columns): ...,"Test data","Result","Functional,Regression,E2E","Component",,,,,No,,,"REQ-001,TS-001"
-                                                   ↑ Column 7 (one cell)                    ↑ Column 16 (one cell)
+❌ **WRONG (19+ columns):**
+```csv
+...,"Test data","Result",Functional,Regression,E2E,"Component",,,,,No,,,REQ-001,TS-001
+                          ↑col7     ↑col8      ↑col9           ↑col16  ↑col17 (BROKEN)
+```
+
+✅ **CORRECT (16 columns):**
+```csv
+...,"Test data","Result","Functional,Regression,E2E","Component",,,,,No,,,"REQ-001,TS-001"
+                         ↑ Column 7 (one cell)                    ↑ Column 16 (one cell)
 ```
 
 **When generating CSV rows:**
@@ -107,8 +128,69 @@ MANDATORY FIRST ACTION:
 - Multiple columns in the SAME row can be quoted - this is not only allowed, it's REQUIRED!
 - The commas MUST be inside the quotes to stay in one column
 
+---
+
+## 🚨 CRITICAL: MULTI-STEP TEST CASES - DO NOT SKIP THIS SECTION
+
+### ❌ NEVER DO THIS (WRONG):
+```csv
+"TC-001","Objective","Pre-condition","1. Step one\n2. Step two\n3. Step three","Data","Result",...
+```
+**Problem:** All steps in ONE cell with newlines = BROKEN FORMAT ❌
+
+### ✅ ALWAYS DO THIS (CORRECT):
+```csv
+"TC-001","Objective","Pre-condition","Step 1: Step one","Data","Result","Labels","Component",,,,,No,,,"REQ-001,TS-001"
+,,,"Step 2: Step two",,,,,,,,,,,,
+,,,"Step 3: Step three",,,,,,,,,,,,
+```
+**Solution:** Each step gets its own ROW ✅
+
+### 📋 MANDATORY MULTI-STEP FORMAT RULES:
+
+#### When a test case has multiple steps (2 or more):
+
+**ROW 1 (Main Row):**
+- Fill ALL 16 columns: Name, Objective, Pre-condition, **Step 1**, Test Data, Test Result, Labels, Components, QA Engineer, Fix versions, Affect versions, Automated, API, Jira, Sub Domain, Requirement ID
+- Test Step column contains: `"Step 1: [description]"`
+- This row has complete metadata
+
+**ROW 2+ (Step Continuation Rows):**
+- Fill ONLY column 4 (Test Step)
+- ALL other 15 columns are EMPTY (just commas)
+- Test Step column contains: `"Step 2: [description]"`, `"Step 3: [description]"`, etc.
+- Format: `,,,"Step 2: [description]",,,,,,,,,,,,`
+
+#### Visual Example - 4-Step Test Case:
+```csv
+"TC-001: Test Name","Verify something","User logged in","Step 1: Do first action","Test data","Expected result","Functional,Smoke","Component",,,,,No,,,"REQ-001,TS-001"
+,,,"Step 2: Do second action",,,,,,,,,,,,
+,,,"Step 3: Do third action",,,,,,,,,,,,
+,,,"Step 4: Verify the result",,,,,,,,,,,,
+```
+
+**Count the commas:** Each continuation row has exactly 15 commas (making 16 columns total)
+
+#### 🔴 VALIDATION CHECKPOINT:
+Before saving the CSV, verify:
+- [ ] Each test case with N steps has N rows (1 main + N-1 continuation)
+- [ ] Continuation rows have ONLY the Test Step column filled
+- [ ] Continuation rows have 15 empty columns (3 commas before Test Step, 12 commas after)
+- [ ] NO newline characters (`\n`) inside any cell
+- [ ] NO merged steps in a single cell
+- [ ] Each step uses format: `"Step 1:"`, `"Step 2:"`, `"Step 3:"`, etc.
+
+#### Common Mistakes to Avoid:
+1. ❌ Putting all steps in one cell separated by `\n`
+2. ❌ Using numbered list format: `"1.\n2.\n3."` instead of separate rows
+3. ❌ Forgetting to make continuation rows (Step 2+) have only Test Step column filled
+4. ❌ Filling Test Data or other columns in continuation rows
+5. ❌ Not using exactly 15 commas in continuation rows
+
+---
+
 #### 2.1 Test Case Types - MANDATORY Coverage
-Generate test cases for **ALL** of the following types:
+Generate test cases for ALL of the following types:
 
 ##### 2.1.1 Functional Test Cases
 - Verify each feature works as per requirements
@@ -124,20 +206,20 @@ Generate test cases for **ALL** of the following types:
 - Quick validation of critical paths
 - Verify system is stable for further testing
 - Cover login, core features, basic workflows
-- Priority: P0
+- **Priority:** P0
 
 ##### 2.1.4 End-to-End (E2E) Test Cases
 - Complete user journeys across multiple components
 - Integration of UI → Backend → Database → External Systems
 - Real-world scenarios with full data flow
-- Priority: P0/P1
+- **Priority:** P0/P1
 
 ##### 2.1.5 Integration Test Cases
 - Verify communication between modules/services
 - API integrations with external systems
 - Database interactions
 - Message queue/event processing
-- Priority: P1
+- **Priority:** P1
 
 ##### 2.1.6 Negative Test Cases
 - Invalid inputs (empty, null, special characters)
@@ -145,44 +227,34 @@ Generate test cases for **ALL** of the following types:
 - Unauthorized access attempts
 - Invalid state transitions
 - Malformed API requests
-- Priority: P1/P2
+- **Priority:** P1/P2
 
 ##### 2.1.7 Edge Test Cases
 - Boundary values (min/max)
-- Concurrent users/requests
-- Large data sets
-- Network failures/timeouts
-- System limits (pagination, batch sizes)
-- Race conditions
-- Priority: P2
-
 #### 2.2 Test Case Distribution Guidelines
-- **Functional**: 30-40% of total test cases
-- **Regression**: 15-20% of total test cases
-- **Smoke**: 5-10% of total test cases
-- **E2E**: 10-15% of total test cases
-- **Integration**: 10-15% of total test cases
-- **Negative**: 15-20% of total test cases
-- **Edge**: 10-15% of total test cases
-
+- **Functional:** 30-40% of total test cases
+- **Regression:** 15-20% of total test cases
+- **Smoke:** 5-10% of total test cases
+- **E2E:** 10-15% of total test cases
+- **Integration:** 10-15% of total test cases
+- **Negative:** 15-20% of total test cases
+- **Edge:**rrent users/requests
+Large data sets
 #### 2.3 CSV Format Requirements - MANDATORY TEMPLATE ENFORCEMENT
+⚠️ **CRITICAL: ABSOLUTE TEMPLATE COMPLIANCE REQUIRED - NO EXCEPTIONS** ⚠️
 
-**⚠️ CRITICAL: ABSOLUTE TEMPLATE COMPLIANCE REQUIRED - NO EXCEPTIONS ⚠️**
-
-**🔴 STEP 1 - READ TEMPLATE FILE FIRST (MANDATORY):**
+##### 🔴 STEP 1 - READ TEMPLATE FILE FIRST (MANDATORY)
 Before generating ANY CSV content, you SHOULD:
-1. **Read the template file:** `.github\agents\Test Case Generator\agents-context\skills\Test Case\Template\ZephyrTestCaseTemplate.csv`
-2. **Extract the exact header row** from line 1 of the template
-3. **Use ONLY those column headers** - do not add, remove, or modify ANY columns
-4. **Copy the header row exactly** as the first line of your generated CSV
+
+- Read the template file: `.github\agents\Test Case Generator\agents-context\skills\Test Case\Template\ZephyrTestCaseTemplate.csv`
+- Extract the exact header row from line 1 of the template
+- Use ONLY those column headers - do not add, remove, or modify ANY columns
+- Copy the header row exactly as the first line of your generated CSV
 
 **Template Location:**
-```
-MANDATORY PATH: .github\agents\Test Case Generator\agents-context\skills\Test Case\Template\ZephyrTestCaseTemplate.csv
-```
+##### 🔴 VALIDATION CHECKPOINT
+After reading the template, verify you have exactly 16 columns in this exact order:
 
-**🔴 VALIDATION CHECKPOINT:**
-After reading the template, verify you have exactly **16 columns** in this exact order:
 1. Name
 2. Objective
 3. Pre-condition
@@ -200,7 +272,7 @@ After reading the template, verify you have exactly **16 columns** in this exact
 15. Sub Domain
 16. Requirement ID
 
-**❌ FORBIDDEN - DO NOT USE THESE COLUMNS:**
+##### ❌ FORBIDDEN - DO NOT USE THESE COLUMNS:
 - Priority (not in template)
 - Component (different from "Components")
 - Status (not in template)
@@ -211,32 +283,51 @@ After reading the template, verify you have exactly **16 columns** in this exact
 - Precondition (different from "Pre-condition" with hyphen)
 - Expected Result (different from "Test Result")
 
-**✅ CSV Generation Rules:**
-- **First line of CSV:** Copy the exact header row from the template file
-- **Do NOT hardcode headers** - always read them from the template
+##### ✅ CSV Generation Rules:
+- First line of CSV: Copy the exact header row from the template file
+- Do NOT hardcode headers - always read them from the template
 - Each test case row must use ONLY the 16 template columns
-- Fill appropriate columns with test case data, leave others blank if not applicable
+- 
+Priority (not in template)
+Component (different from "Components")
+Status (not in template)
+Owner (different from "QA Engineer")
+Folder (not in template)
+##### Multi-Step Test Cases Formatting:
 
-**Multi-Step Test Cases Formatting:**
-- **IMPORTANT:** The "Sub Domain" column must always be left blank (empty) for all test cases
-- If a test case has multiple steps:
-  - **Row 1 (Main test case row):** Populate all metadata columns (Name, Objective, Pre-condition, Labels, etc.) + Step 1 in "Test Step" column
-  - **Row 2:** Leave all columns blank EXCEPT "Test Step" column (contains Step 2)
-  - **Row 3:** Leave all columns blank EXCEPT "Test Step" column (contains Step 3)
-  - Continue pattern for all additional steps
+**⚠️ CRITICAL: See section "🚨 CRITICAL: MULTI-STEP TEST CASES" above for detailed instructions**
 
-- For Step 2+ rows:
-  - Only the "Test Step" column should contain text
-  - All other 15 columns must be completely blank (empty cells)
+**IMPORTANT:** The "Sub Domain" column must always be left blank (empty) for all test cases
 
-- Do NOT merge steps into a single row
-- Do NOT place steps in the "Test Data" column
-- Preserve step numbering format:
-  ```
-  Step 1: [description]
-  Step 2: [description]
-  Step 3: [description]
-  ```
+**Quick Reference for Multi-Step Test Cases:**
+
+When creating test cases with multiple steps, you MUST create multiple CSV rows:
+
+1. **First Row:** All metadata + Step 1
+2. **Second Row:** `,,,"Step 2: [description]",,,,,,,,,,,,` (only Test Step filled)
+3. **Third Row:** `,,,"Step 3: [description]",,,,,,,,,,,,` (only Test Step filled)
+4. Continue for all steps...
+
+**NEVER combine steps in one cell with newlines!**
+
+**Format each step as:**
+- `"Step 1: [action description]"`
+- `"Step 2: [action description]"`
+- `"Step 3: [action description]"`
+
+**Continuation row structure (Step 2+):**
+```
+,,,"Step N: [description]",,,,,,,,,,,,
+↑  ↑ ↑                    ↑           ↑
+3  2 1                    12 empty    15th comma
+commas                    columns
+```column should contain text
+All other 15 columns must be completely blank (empty cells)
+Do NOT merge steps into a single row
+
+Do NOT place steps in the "Test Data" column
+
+Preserve step numbering format:
 
 #### 2.4 Labels Column - Test Type Identification (Column 7)
 
@@ -245,48 +336,43 @@ After reading the template, verify you have exactly **16 columns** in this exact
 
 **Format for multiple labels:**
 - Combine in ONE cell: `"Functional,Regression,E2E"`
-- **MUST wrap in double quotes** to prevent comma from splitting into extra columns
+- MUST wrap in double quotes to prevent comma from splitting into extra columns
 - No spaces after commas
 
-**⚠️ IMPORTANT: This rule works SIMULTANEOUSLY with Requirement ID quoting**
-- When a row has BOTH multi-value Labels AND Requirement ID, BOTH must be quoted
-- Example row: `...,"Functional,E2E",Component,,,,,No,,,"REQ-001,TS-001"`
-  - Column 7 (Labels): `"Functional,E2E"` ← Quoted
-  - Column 16 (Requirement ID): `"REQ-001,TS-001"` ← Also quoted
+⚠️ **IMPORTANT:** This rule works SIMULTANEOUSLY with Requirement ID quoting
 
-**Examples:**
+When a row has BOTH multi-value Labels AND Requirement ID, BOTH must be quoted:
 ```csv
-✅ CORRECT: "Functional,Regression,E2E"
-❌ WRONG: Functional,Regression,E2E  (creates 3 columns instead of 1)
+...,"Functional,E2E",Component,,,,,No,,,"REQ-001,TS-001"
+   ↑ Column 7 (Quoted)              ↑ Column 16 (Also quoted)
 ```
 
+**Examples:**
 #### 2.5 Requirement ID Column - Requirements & Test Scenario Traceability (Column 16)
 
-**🔴 CRITICAL FORMATTING RULE - READ CAREFULLY:**
+##### 🔴 CRITICAL FORMATTING RULE - READ CAREFULLY:
 
 The "Requirement ID" column (last column, #16) contains BOTH values in a SINGLE cell:
-- Format: **`"REQ-XXX,TS-YYY"`** (MUST include double quotes)
-- **WITHOUT quotes, the comma is treated as a CSV delimiter and splits into 2 columns**
-- Example: `"REQ-001,TS-001"`
+- **Format:** `"REQ-XXX,TS-YYY"` (MUST include double quotes)
+- WITHOUT quotes, the comma is treated as a CSV delimiter and splits into 2 columns
+- **Example:** `"REQ-001,TS-001"`
 
-**🚨 WHY QUOTES ARE MANDATORY:**
-In CSV format, commas separate columns. When you write `REQ-001,TS-001` without quotes:
-- CSV parser sees: column 16 = `REQ-001`, column 17 = `TS-001` ❌
+##### 🚨 WHY QUOTES ARE MANDATORY:
+In CSV format, commas separate columns.
+
+**When you write `REQ-001,TS-001` without quotes:**
+- CSV parser sees: column 16 = REQ-001, column 17 = TS-001 ❌
 - Result: 17 columns total (breaks import)
 
-When you write `"REQ-001,TS-001"` with quotes:
-- CSV parser sees: column 16 = `REQ-001,TS-001` (one value) ✅
-- Result: 16 columns total (correct)
-
-**⚠️ SIMULTANEOUS WITH LABELS QUOTING:**
-**Both Column 7 (Labels) AND Column 16 (Requirement ID) must be quoted in the SAME row when both contain commas**
+##### ⚠️ SIMULTANEOUS WITH LABELS QUOTING:
+Both Column 7 (Labels) AND Column 16 (Requirement ID) must be quoted in the SAME row when both contain commas
 
 **Complete Row Example:**
 ```csv
 "TC-001","Objective","Pre-condition","Step 1","Data","Result","Functional,Regression,E2E","Component",,,,,No,,,"REQ-001,TS-001"
                                                                ↑ Col 7 quoted              ↑ Col 16 quoted
 ```
-**Both columns have quotes because both contain commas - this is correct and required!**
+Both columns have quotes because both contain commas - this is correct and required!
 
 **❌ WRONG - Creates 17+ columns:**
 ```csv
@@ -300,47 +386,40 @@ When you write `"REQ-001,TS-001"` with quotes:
        ↑col 16 (one column with both values)
 ```
 
-**How to Extract from Test Plan RTM:**
+##### How to Extract from Test Plan RTM:
 1. Find the test scenario in the RTM (Requirements Traceability Matrix)
 2. Get the Requirement ID from the "Req ID" column
 3. Get ONE Test Scenario ID from the "Test Scenario IDs" column
-4. Combine as: **`"REQ-XXX,TS-YYY"`** with quotes in the Requirement ID column
+4. Combine as: `"REQ-XXX,TS-YYY"` with quotes in the Requirement ID column
 
 **If RTM shows multiple scenarios:**
-- RTM: `REQ-001` with scenarios `TS-001, TS-002`
+- RTM: REQ-001 with scenarios TS-001, TS-002
 - Create 2 separate test case rows:
-  - Row 1: **`"REQ-001,TS-001"`** (quoted) with **`"Functional,Smoke"`** (also quoted if multiple labels)
-  - Row 2: **`"REQ-001,TS-002"`** (quoted) with **`"Functional,Regression"`** (also quoted if multiple labels)
+  - Row 1: `"REQ-001,TS-001"` (quoted) with `"Functional,Smoke"` (also quoted if multiple labels)
+  - Row 2: `"REQ-001,TS-002"` (quoted) with `"Functional,Regression"` (also quoted if multiple labels)
 
-**⚠️ CRITICAL VALIDATION:**
+##### ⚠️ CRITICAL VALIDATION:
 - Every CSV row must have exactly 16 columns
-- **If you see 17+ columns, you forgot quotes around comma-containing values**
-- The comma between REQ and TS MUST be inside quotes to prevent column splitting
-- The commas in Labels MUST also be inside quotes
-- When writing CSV: Always use `"REQ-001,TS-001"` NOT `REQ-001,TS-001`
-- **Quote ALL comma-containing columns in the same row - not just one!**
-
 #### 2.6 Sub Domain Column - Leave Blank
+
 **MANDATORY Rule:**
 - The "Sub Domain" column MUST always be left blank (empty) for all test cases
 - Do NOT populate this column with any values
 - This applies to both the main test case row and all subsequent step rows
-- Format in CSV: Leave the Sub Domain column empty with no text
+- 
+Every CSV row must have exactly 16 columns
+If you see 17+ columns, you forgot quotes around comma-containing values
+The comma between REQ and TS MUST be inside quotes to prevent column splitting
+#### 2.7 CSV ROW FORMAT EXAMPLES
 
----
-
-### 2.7 CSV ROW FORMAT EXAMPLES
-
-**🔴 CRITICAL: BOTH Labels AND Requirement ID use quotes when containing commas!**
+##### 🔴 CRITICAL: BOTH Labels AND Requirement ID use quotes when containing commas!
 
 **Single-Step Test Case with BOTH columns quoted (16 columns):**
 ```csv
 "TC-001: Test Name","Test objective","Pre-conditions","Step 1: Action","Test data","Expected result","Functional,Smoke","Component",,,,,No,,,,"REQ-001,TS-001"
                                                                                                       ↑ Col 7 QUOTED          ↑ Col 16 QUOTED
 ```
-**Column breakdown:** 1=Name, 2=Objective, 3=Pre-condition, 4=Test Step, 5=Test Data, 6=Test Result, 7=**Labels(QUOTED)**, 8=Components, 9-15=empty, 16=**RequirementID(QUOTED)**
-
-**⚠️ KEY INSIGHT: Notice Column 7 AND Column 16 are BOTH quoted in the SAME row - this is correct!**
+**Column breakdown:** 1=Name, 2=Objective, 3=Pre-condition, 4=Test Step, 5=Test Data, 6=Test Result, 7=Labels(QUOTED), 8=Components, 9-15=empty, 16=RequirementID(QUOTED)
 
 **❌ WRONG - Labels without quotes (creates 18+ columns):**
 ```csv
@@ -372,105 +451,81 @@ When you write `"REQ-001,TS-001"` with quotes:
 ,,,"Step 2: Second action","Data 2","Result 2",,,,,,,,,,
 ,,,"Step 3: Third action","Data 3","Result 3",,,,,,,,,,
 ```
-*Note: Row 1 has BOTH `"Functional,Regression"` (col 7) AND `"REQ-002,TS-005"` (col 16) quoted; Continuation rows have 13 empty + 3 filled*
-
-**Multiple Test Scenarios from Same Requirement (with multiple labels):**
-```csv
-"TC-010: Scenario A","Objective A","Pre-cond A","Step 1","Data A","Result A","Functional,Smoke",,,,,No,,,,"REQ-004,TS-010"
-"TC-011: Scenario B","Objective B","Pre-cond B","Step 1","Data B","Result B","Negative,Edge",,,,,No,,,,"REQ-004,TS-011"
-```
-*Note: Each row has BOTH Labels AND Requirement ID quoted when containing commas; Same REQ, different TS = separate rows*
-
-**🔴 REMEMBER: It's not "Label OR Requirement ID" - it's "Label AND Requirement ID" - BOTH get quoted when they contain commas!**
+**Note:** Row 1 has BOTH `"Functional,Regression"` (col 7) AND `"REQ-002,TS-005"` (col 16) quoted; Continuation rows have 13 empty + 3 filled
 
 ---
 
 ### 3. File Naming Convention
-- Extract the project name from the Test Plan file name
-- Format the output file name as: ProjectName_Zephyrimportready.csv
-- **Save location**: `.github\agents\Test Case Generator\agents-context\ZephyrReadyTestCases\`
-- **Full path example**: `.github\agents\Test Case Generator\agents-context\ZephyrReadyTestCases\Spectrum_Brand_Manager_Zephyrimportready.csv`
-- Example: If Test Plan is "Spectrum_Brand_Manager_TestPlan.md", CSV file should be "Spectrum_Brand_Manager_Zephyrimportready.csv"
 
+- Extract the project name from the Test Plan file name
+- Format the output file name as: `ProjectName_Zephyrimportready.csv`
 ---
 
 ### 4. Pre-Generation Template Validation (MANDATORY - EXECUTE THESE STEPS)
 
-**🔴 CRITICAL: Follow these steps IN ORDER before generating CSV:**
+#### 🔴 CRITICAL: Follow these steps IN ORDER before generating CSV:
 
-**STEP 1: Read Template File**
-```
-Action: Read file at path: .github\agents\Test Case Generator\agents-context\skills\Test Case\Template\ZephyrTestCaseTemplate.csv
-Required: Read lines 1-2 (header + any example row if present)
-Store: Extract the complete first line (header row)
-```
+##### STEP 1: Read Template File
+- **Action:** Read file at path: `.github\agents\Test Case Generator\agents-context\skills\Test Case\Template\ZephyrTestCaseTemplate.csv`
+- **Required:** Read lines 1-2 (header + any example row if present)
+- **Store:** Extract the complete first line (header row)
 
-**STEP 2: Parse Template Headers**
+##### STEP 2: Parse Template Headers
 - Split the header row by commas
 - Store each column header exactly as it appears (preserve case, spacing, hyphens)
 - Count total columns (must equal 16)
 - Create ordered list: [column1, column2, ..., column16]
 
-**STEP 3: Validate Template Structure**
-```
-✅ MUST HAVE: Exactly 16 columns
-✅ REQUIRED COLUMNS: Name, Objective, Pre-condition, Test Step, Test Data, Test Result, Labels, Components, QA Engineer, Fix versions, Affect versions, Automated, API, Jira, Sub Domain, Requirement ID
-❌ ABORT IF: Column count ≠ 16
-❌ ABORT IF: Any required column is missing
-```
+##### STEP 3: Validate Template Structure
+- ✅ **MUST HAVE:** Exactly 16 columns
+- ✅ **REQUIRED COLUMNS:** Name, Objective, Pre-condition, Test Step, Test Data, Test Result, Labels, Components, QA Engineer, Fix versions, Affect versions, Automated, API, Jira, Sub Domain, Requirement ID
+- ❌ **ABORT IF:** Column count ≠ 16
+- ❌ **ABORT IF:** Any required column is missing
 
-**STEP 4: Generate CSV with Template Headers**
-- **Line 1 of output CSV:** Copy the exact header row from template (character-for-character match)
-- **Line 2+:** Test case data rows using only the 16 template columns
-- **NO custom columns allowed** - only use what's in the template
+##### STEP 4: Generate CSV with Template Headers
+- Line 1 of output CSV: Copy the exact header row from template (character-for-character match)
+- Line 2+: Test case data rows using only the 16 template columns
+- NO custom columns allowed - only use what's in the template
 
-**STEP 5: Post-Generation Validation**
+##### STEP 5: Post-Generation Validation
 After creating the CSV content, validate:
-```
-CHECK 1: First line of generated CSV matches template header exactly
-CHECK 2: Every data row has exactly 16 column values (some may be blank)
-CHECK 3: No column headers have been added, removed, or modified
-CHECK 4: "Sub Domain" column is blank for all rows
-CHECK 5: All test case rows follow the template structure
 
-IF ANY CHECK FAILS:
-  - DO NOT save the file
-  - Report the specific validation error
-  - Show expected vs actual headers
-  - Request correction before proceeding
-```
+- **CHECK 1:** First line of generated CSV matches template header exactly
+- **CHECK 2:** Every data row has exactly 16 column values (some may be blank)
+- **CHECK 3:** No column headers have been added, removed, or modified
+- **CHECK 4:** "Sub Domain" column is blank for all rows
+- **CHECK 5:** All test case rows follow the template structure
 
-**STEP 6: Final Verification Before Save**
-```
+**IF ANY CHECK FAILS:**
+- DO NOT save the file
+- Report the specific validation error
+- Show expected vs actual headers
+- Request correction before proceeding
+
+##### STEP 6: Final Verification Before Save
 Before calling create_file or write_file:
-  ✓ Template file was read successfully
-  ✓ Headers extracted and validated
-  ✓ Generated CSV uses exact template headers
-  ✓ All 16 columns present in every row
-  ✓ No extra or missing columns
-  ✓ Multi-step test cases formatted correctly
-  ✓ "Sub Domain" column left blank throughout
-```
+- ✓ Template file was read successfully
+- ✓ Headers extracted and validated
+- ✓ Generated CSV uses exact template headers
+- ✓ All 16 columns present in every row
+- ✓ No extra or missing columns
+- ✓ Multi-step test cases formatted correctly
+- ✓ "Sub Domain" column left blank throughout
 
-**❌ VALIDATION FAILURE PROTOCOL:**
-```
+##### ❌ VALIDATION FAILURE PROTOCOL:
 IF validation fails:
-  1. STOP immediately - do not save file
-  2. Report error message:
-     "❌ CSV GENERATION FAILED - Template validation error"
-     "Expected: [template headers]"
-     "Generated: [your headers]"
-     "Mismatch: [specific differences]"
-  3. Do not proceed until issue is resolved
-```
-
+1. STOP immediately - do not save file
+2. Report error message:
+   - "❌ CSV GENERATION FAILED - Template validation error"
 ---
 
 ### 5. Response Format
+
 After successful CSV generation and validation, respond with:
 
-**Required Response Structure:**
-```markdown
+#### Required Response Structure:
+
+```
 # [Project Name] - Zephyrimportready.csv created in .github\agents\Test Case Generator\agents-context\ZephyrReadyTestCases
 
 ✅ TEMPLATE VALIDATION: PASSED
@@ -500,7 +555,8 @@ After successful CSV generation and validation, respond with:
    - Ready for Import: Yes ✅
 ```
 
-**Example Response:**
+#### Example Response:
+
 ```
 # Spectrum Brand Manager - Zephyrimportready.csv created in .github\agents\Test Case Generator\agents-context\ZephyrReadyTestCases
 
@@ -521,77 +577,130 @@ After successful CSV generation and validation, respond with:
 
 ✅ REQUIREMENTS COVERAGE:
    - Total Requirements: 8
-   - Total Test Scenarios: 45
-   - Coverage: 100%
-
-✅ FILE DETAILS:
-   - Location: .github\agents\Test Case Generator\agents-context\ZephyrReadyTestCases\
-   - File Name: Spectrum_Brand_Manager_Zephyrimportready.csv
-   - Format: Zephyr Scale Import-Ready CSV
-   - Ready for Import: Yes ✅
-```
-  
 ---
 
 ### 6. Quality Checklist (MUST VERIFY BEFORE COMPLETING)
 
-**🔴 PRE-SAVE VALIDATION - Complete ALL checks before calling create_file:**
+#### 🔴 PRE-SAVE VALIDATION - Complete ALL checks before calling create_file:
 
-**Template Compliance Checks:**
-- [ ] ✅ Template file read from: `.github\agents\Test Case Generator\agents-context\skills\Test Case\Template\ZephyrTestCaseTemplate.csv`
-- [ ] ✅ Template headers extracted and stored
-- [ ] ✅ Generated CSV first line matches template headers exactly (character-by-character)
-- [ ] ✅ No hardcoded headers used - all headers come from template file
+##### Template Compliance Checks:
+- ✅ Template file read from: `.github\agents\Test Case Generator\agents-context\skills\Test Case\Template\ZephyrTestCaseTemplate.csv`
+- ✅ Template headers extracted and stored
+- ✅ Generated CSV first line matches template headers exactly (character-by-character)
+- ✅ No hardcoded headers used - all headers come from template file
 
-**Column Structure Checks:**
-- [ ] ✅ Generated CSV has exactly 16 columns
-- [ ] ✅ Column order matches template exactly
-- [ ] ✅ Column names match template exactly (case-sensitive, preserve hyphens/spaces)
-- [ ] ✅ NO extra columns added (verify: no Priority, Status, Owner, Folder, Estimated Time, Test Script Type, Component, Precondition, Expected Result)
-- [ ] ✅ NO columns removed or renamed from template
-- [ ] ✅ All column headers from template are present
+##### Column Structure Checks:
+- ✅ Generated CSV has exactly 16 columns
+- ✅ Column order matches template exactly
+- ✅ Column names match template exactly (case-sensitive, preserve hyphens/spaces)
+- ✅ NO extra columns added (verify: no Priority, Status, Owner, Folder, Estimated Time, Test Script Type, Component, Precondition, Expected Result)
+- ✅ NO columns removed or renamed from template
+- ✅ All column headers from template are present
 
-**Data Format Checks:**
-- [ ] ✅ "Sub Domain" column is empty for ALL rows (main rows and step rows)
-- [ ] ✅ Multi-step test cases: Step 2+ rows have ONLY "Test Step" populated, all other columns blank
-- [ ] ✅ "Labels" column contains comma-separated values in ONE cell with quotes (e.g., `"Functional,Regression,Smoke"`)
-- [ ] ✅ **"Requirement ID" column (column 16) contains BOTH REQ-XXX and TS-YYY in ONE cell with quotes**
-- [ ] ✅ **CRITICAL: Format is `"REQ-001,TS-001"` with quotes - NOT `REQ-001,TS-001` without quotes**
-- [ ] ✅ **CRITICAL: Each row has EXACTLY 16 columns - no 17th column (verify no TS-YYY split)**
-- [ ] ✅ **The comma between REQ-XXX and TS-YYY is INSIDE the quotes**
-- [ ] ✅ **Verify when writing CSV: Use format `...,"REQ-001,TS-001"` NOT `...,REQ-001,TS-001`**
-- [ ] ✅ All test case rows have exactly 16 column values (blank columns counted as empty cells)
+##### Data Format Checks:
+- ✅ "Sub Domain" column is empty for ALL rows (main rows and step rows)
+- ✅ Multi-step test cases: Step 2+ rows have ONLY "Test Step" populated, all other columns blank
+- ✅ "Labels" column contains comma-separated values in ONE cell with quotes (e.g., `"Functional,Regression,Smoke"`)
+- ✅ "Requirement ID" column (column 16) contains BOTH REQ-XXX and TS-YYY in ONE cell with quotes
+- ✅ **CRITICAL:** Format is `"REQ-001,TS-001"` with quotes - NOT `REQ-001,TS-001` without quotes
+- ✅ **CRITICAL:** Each row has EXACTLY 16 columns - no 17th column (verify no TS-YYY split)
+- ✅ The comma between REQ-XXX and TS-YYY is INSIDE the quotes
+- ✅ Verify when writing CSV: Use format `...,"REQ-001,TS-001"` NOT `...,REQ-001,TS-001`
+- ✅ All test case rows have exactly 16 column values (blank columns counted as empty cells)
 
-**🚨 MOST COMMON ERROR - REQUIREMENT ID COLUMN:**
-- [ ] ✅ **Check EVERY test case row: Requirement ID must be `"REQ-XXX,TS-YYY"` in quotes**
-- [ ] ✅ **The most frequent bug: Writing `REQ-001,TS-001` without quotes creates column 17**
-- [ ] ✅ **Solution: ALWAYS wrap in quotes when generating CSV content**
+##### 🚨 CRITICAL: MULTI-STEP TEST CASE VALIDATION (MANDATORY):
+**This section prevents the most common formatting error. Check EVERY test case with multiple steps:**
 
-**File Location Check:**
-- [ ] ✅ File saved to: `.github\agents\Test Case Generator\agents-context\ZephyrReadyTestCases\`
-- [ ] ✅ File name format: `ProjectName_Zephyrimportready.csv`
+- ✅ **NO newlines in cells:** Search generated CSV content for `\n` characters - there should be ZERO
+- ✅ **Separate rows for steps:** Each test case with N steps must create N total rows in CSV
+- ✅ **Main row (Row 1):** Contains all 16 columns filled + first step in Test Step column
+- ✅ **Continuation rows (Row 2+):** 
+  - ONLY column 4 (Test Step) has content
+  - ALL other 15 columns are blank (3 commas, then quoted step, then 12 commas)
+  - Format: `,,,"Step 2: [description]",,,,,,,,,,,,`
+- ✅ **Comma count verification:** Each continuation row has exactly 15 commas
+- ✅ **Step format:** Each step uses `"Step 1:"`, `"Step 2:"`, `"Step 3:"` (not `1.`, `2.`, `3.`)
+- ✅ **NO combined steps:** Never write `"Step 1: action\nStep 2: action\nStep 3: action"` in one cell
+- ✅ **Row count validation:** 
+  - Example: 15 test cases, 10 have 3 steps each, 5 have 2 steps each
+  - Expected rows: 1 header + (10 × 3) + (5 × 2) = 1 + 30 + 10 = 41 total rows
+  - Count your generated rows to verify correct multi-step format
 
-**Content Coverage Checks:**
-- [ ] ✅ All 7 test types generated (Functional, Regression, Smoke, E2E, Integration, Negative, Edge)
-- [ ] ✅ All requirements from RTM covered
-- [ ] ✅ Each test scenario from RTM has corresponding test case(s)
-
-**🔴 CRITICAL CSV STRUCTURE VALIDATION:**
-- [ ] ✅ **Open generated CSV file and verify column count = 16 (NOT 17)**
-- [ ] ✅ **Verify Requirement ID column (last column) shows values like: `"REQ-001,TS-001"` (both in quotes, single cell)**
-- [ ] ✅ **Check no extra column appears after Requirement ID column**
-- [ ] ✅ **All commas within cells are properly quoted to prevent column splitting**
-
-**❌ IF ANY CHECK FAILS:**
+**Before calling create_file, manually verify ONE multi-step test case:**
 ```
+Row Example (3-step test case should be 3 rows):
+"TC-001","Objective","PreCond","Step 1: First action","Data","Result","Functional,Smoke","Comp",,,,,No,,,"REQ-001,TS-001"
+,,,"Step 2: Second action",,,,,,,,,,,,
+,,,"Step 3: Third action",,,,,,,,,,,,
+```
+
+##### 🚨 MOST COMMON ERROR - REQUIREMENT ID COLUMN:
+- ✅ Check EVERY test case row: Requirement ID must be `"REQ-XXX,TS-YYY"` in quotes
+- ✅ The most frequent bug: Writing `REQ-001,TS-001` without quotes creates column 17
+- ✅ Solution: ALWAYS wrap in quotes when generating CSV content
+
+##### File Location Check:
+- ✅ File saved to: `.github\agents\Test Case Generator\agents-context\ZephyrReadyTestCases\`
+- ✅ File name format: `ProjectName_Zephyrimportready.csv`
+
+##### Content Coverage Checks:
+- ✅ All 7 test types generated (Functional, Regression, Smoke, E2E, Integration, Negative, Edge)
+- ✅ All requirements from RTM covered
+- ✅ Each test scenario from RTM has corresponding test case(s)
+
+##### 🔴 CRITICAL CSV STRUCTURE VALIDATION:
+- ✅ Open generated CSV file and verify column count = 16 (NOT 17)
+- ✅ Verify Requirement ID column (last column) shows values like: `"REQ-001,TS-001"` (both in quotes, single cell)
+- ✅ Check no extra column appears after Requirement ID column
+- ✅ All commas within cells are properly quoted to prevent column splitting
+
+##### ❌ IF ANY CHECK FAILS:
+- DO NOT SAVE THE FILE
+- Report the specific failure(s)
+- Fix the issue(s)
+- Re-run validation checklist
+- Only proceed when ALL checks pass
+
+##### ✅ AFTER ALL CHECKS PASS:
+- Create the CSV file using create_file tool
+- Confirm file creation
+- Report test case generation summary with validation status
+
+---XX and TS-YYY in ONE cell with quotes
+ ✅ CRITICAL: Format is "REQ-001,TS-001" with quotes - NOT REQ-001,TS-001 without quotes
+ ✅ CRITICAL: Each row has EXACTLY 16 columns - no 17th column (verify no TS-YYY split)
+ ✅ The comma between REQ-XXX and TS-YYY is INSIDE the quotes
+ ✅ Verify when writing CSV: Use format ...,"REQ-001,TS-001" NOT ...,REQ-001,TS-001
+ ✅ All test case rows have exactly 16 column values (blank columns counted as empty cells)
+🚨 MOST COMMON ERROR - REQUIREMENT ID COLUMN:
+
+ ✅ Check EVERY test case row: Requirement ID must be "REQ-XXX,TS-YYY" in quotes
+ ✅ The most frequent bug: Writing REQ-001,TS-001 without quotes creates column 17
+ ✅ Solution: ALWAYS wrap in quotes when generating CSV content
+File Location Check:
+
+ ✅ File saved to: .github\agents\Test Case Generator\agents-context\ZephyrReadyTestCases\
+ ✅ File name format: ProjectName_Zephyrimportready.csv
+Content Coverage Checks:
+
+ ✅ All 7 test types generated (Functional, Regression, Smoke, E2E, Integration, Negative, Edge)
+ ✅ All requirements from RTM covered
+ ✅ Each test scenario from RTM has corresponding test case(s)
+🔴 CRITICAL CSV STRUCTURE VALIDATION:
+
+ ✅ Open generated CSV file and verify column count = 16 (NOT 17)
+ ✅ Verify Requirement ID column (last column) shows values like: "REQ-001,TS-001" (both in quotes, single cell)
+ ✅ Check no extra column appears after Requirement ID column
+ ✅ All commas within cells are properly quoted to prevent column splitting
+❌ IF ANY CHECK FAILS:
+
 DO NOT SAVE THE FILE
 Report the specific failure(s)
 Fix the issue(s)
 Re-run validation checklist
 Only proceed when ALL checks pass
-```
+✅ AFTER ALL CHECKS PASS:
 
-**✅ AFTER ALL CHECKS PASS:**
-- Create the CSV file using create_file tool
-- Confirm file creation
-- Report test case generation summary with validation status
+Create the CSV file using create_file tool
+Confirm file creation
+Report test case generation summary with validation status
